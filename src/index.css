@@ -1,1 +1,25 @@
 @import "tailwindcss";
+
+@theme {
+  --color-accent: #2d5bff;
+  --color-accent-hover: #1a48f0;
+  --color-tint: #eef2ff;
+
+  --color-ink: #0f172a;
+  --color-soft: #64748b;
+  --color-muted: #f1f5f9;
+  --color-line: #e2e8f0;
+  --color-surface: #ffffff;
+  --color-canvas: #f8fafc;
+
+  --color-error: #b91c1c;
+  --color-error-bg: #fef2f2;
+  --color-error-border: #fecaca;
+
+  --font-display: "Michroma", ui-sans-serif, sans-serif;
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Outfit", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 5px;
+  --radius-btn: 5px;
+}
