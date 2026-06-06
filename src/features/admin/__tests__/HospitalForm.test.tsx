@@ -41,7 +41,7 @@ describe('HospitalForm', () => {
     render(
       <HospitalForm open={true} onClose={onClose} hospital={null} onSaved={onSaved} />,
     );
-    fireEvent.click(screen.getByText('Add hospital'));
+    fireEvent.click(screen.getByRole('button', { name: 'Add hospital' }));
     await waitFor(() => {
       expect(screen.getByText('Hospital name is required')).toBeInTheDocument();
     });

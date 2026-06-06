@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeAll } from 'vitest';
+import { describe, it, expect, vi, beforeAll, afterEach } from 'vitest';
 import { exportHospitals, ALL_COLUMNS, COLUMN_LABELS } from '../useExport';
 import type { Hospital } from '../../../types/hospital';
 
@@ -21,6 +21,10 @@ const mockHospital: Hospital = {
 };
 
 describe('exportHospitals', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   beforeAll(() => {
     global.URL.createObjectURL = vi.fn(() => 'blob:test');
     global.URL.revokeObjectURL = vi.fn();

@@ -22,7 +22,7 @@ const hospital: Hospital = {
 describe('HospitalCard', () => {
   it('renders hospital name', () => {
     render(<HospitalCard hospital={hospital} />);
-    expect(screen.getByText('Eko Hospital')).toBeInTheDocument();
+    expect(screen.getByText('EKO HOSPITAL')).toBeInTheDocument();
   });
 
   it('renders location with LGA and city', () => {
