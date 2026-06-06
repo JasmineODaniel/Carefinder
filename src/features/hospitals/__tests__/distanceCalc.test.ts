@@ -22,10 +22,10 @@ describe('haversineKm', () => {
     expect(haversineKm(6.5244, 3.3792, 6.5244, 3.3792)).toBe(0);
   });
 
-  it('calculates correct distance between Lagos and Abuja (~476 km)', () => {
+  it('calculates correct distance between Lagos and Abuja (~534 km)', () => {
     const dist = haversineKm(6.5244, 3.3792, 9.0579, 7.4951);
-    expect(dist).toBeGreaterThan(460);
-    expect(dist).toBeLessThan(500);
+    expect(dist).toBeGreaterThan(500);
+    expect(dist).toBeLessThan(560);
   });
 
   it('is symmetric — distance(A, B) equals distance(B, A)', () => {

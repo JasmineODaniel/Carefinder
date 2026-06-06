@@ -49,7 +49,7 @@ describe('exportHospitals', () => {
     expect(a.download).toMatch(/hospitals-all-\d{4}-\d{2}-\d{2}\.csv/);
   });
 
-  it('joins specialties as comma-separated string', () => {
+  it('joins specialties as comma-separated string', async () => {
     const Papa = (await import('papaparse')).default;
     const unparseSpy = vi.spyOn(Papa, 'unparse');
 
@@ -62,7 +62,7 @@ describe('exportHospitals', () => {
     expect(rows[0][COLUMN_LABELS.specialties]).toBe('emergency, maternity');
   });
 
-  it('exports only selected columns', () => {
+  it('exports only selected columns', async () => {
     const Papa = (await import('papaparse')).default;
     const unparseSpy = vi.spyOn(Papa, 'unparse');
 
