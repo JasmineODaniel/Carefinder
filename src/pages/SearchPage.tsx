@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { MapPin, Search, Map, List } from 'lucide-react';
+import { MapPin, Search } from 'lucide-react';
 import { PageLayout } from '../components/layout/PageLayout';
 import { HospitalCard } from '../features/hospitals/HospitalCard';
 import { FilterBar } from '../features/hospitals/FilterBar';
@@ -149,11 +149,11 @@ export function SearchPage() {
               <div className="hidden items-center rounded-[5px] border border-line bg-canvas sm:inline-flex">
                 {(
                   [
-                    { mode: 'split' as ViewMode, icon: List, label: 'Split' },
-                    { mode: 'list' as ViewMode, icon: List, label: 'List' },
-                    { mode: 'map' as ViewMode, icon: Map, label: 'Map' },
+                    { mode: 'split' as ViewMode, label: 'Split' },
+                    { mode: 'list' as ViewMode, label: 'List' },
+                    { mode: 'map' as ViewMode, label: 'Map' },
                   ] as const
-                ).map(({ mode, icon: Icon, label }) => (
+                ).map(({ mode, label }) => (
                   <button
                     key={mode}
                     onClick={() => setViewMode(mode)}

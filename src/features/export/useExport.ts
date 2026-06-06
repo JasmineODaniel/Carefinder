@@ -49,7 +49,7 @@ export function exportHospitals(
       } else if (col === 'rating') {
         row[COLUMN_LABELS[col]] = h.rating != null ? String(h.rating) : '';
       } else {
-        row[COLUMN_LABELS[col]] = String((h as Record<string, unknown>)[col] ?? '');
+        row[COLUMN_LABELS[col]] = String((h as unknown as Record<string, unknown>)[col] ?? '');
       }
     });
     return row;
