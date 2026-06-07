@@ -17,6 +17,7 @@
     "@supabase/supabase-js": "^2.107.0",
     "@tailwindcss/vite": "^4.3.0",
     "@uiw/react-md-editor": "^4.1.1",
+    "clsx": "^2.1.1",
     "dompurify": "^3.4.8",
     "lucide-react": "^1.17.0",
     "mapbox-gl": "^3.24.0",
@@ -25,6 +26,7 @@
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-router-dom": "^7.16.0",
+    "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.0",
     "zod": "^4.4.3"
   },

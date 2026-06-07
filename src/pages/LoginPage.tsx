@@ -1,0 +1,144 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Plus, ArrowRight } from 'lucide-react';
+
+const GRID_IMAGES = [
+  'https://images.unsplash.com/photo-1551190822-a9333d879b1f?auto=format&w=280&q=80',
+  'https://images.unsplash.com/photo-1538108149393-fbbd81895907?auto=format&w=280&q=80',
+  'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&w=280&q=80',
+  'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&w=280&q=80',
+  'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&w=280&q=80',
+  'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&w=280&q=80',
+  'https://images.unsplash.com/photo-1576671081837-49000212a370?auto=format&w=280&q=80',
+  'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&w=280&q=80',
+  'https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?auto=format&w=280&q=80',
+];
+
+const FEATURE_PILLS = [
+  { label: 'Maximum Coverage', accent: true },
+  { label: 'Fast Geolocation' },
+  { label: 'Verified Records' },
+  { label: 'CSV Export' },
+];
+
+export function LoginPage() {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+
+  return (
+    <div className="flex h-screen w-full overflow-hidden bg-[#0a0a0a]">
+
+      <div className="flex w-full flex-col justify-between p-10 md:w-[420px] lg:w-[480px]">
+
+        <div className="flex items-center gap-2.5">
+          <span className="grid size-7 place-items-center rounded-full bg-accent">
+            <Plus className="size-4 text-black" strokeWidth={2.5} />
+          </span>
+          <span className="font-display text-[13px] tracking-tight text-white">
+            Carefinder°
+          </span>
+        </div>
+
+        <div className="flex flex-col gap-6">
+          <div>
+            <p className="text-[10px] font-semibold tracking-[0.2em] text-accent">
+              NIGERIA'S HOSPITAL DIRECTORY
+            </p>
+            <h1 className="mt-3 font-display text-[32px] leading-[1.1] text-white">
+              Welcome back.
+            </h1>
+            <p className="mt-2 text-[14px] leading-relaxed text-[#666]">
+              Find verified hospitals across all 36 states — no account required.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[11px] font-medium tracking-widest text-[#555]">
+                EMAIL (OPTIONAL)
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="w-full rounded-[5px] border border-[#222] bg-[#111] px-4 py-3 text-[14px] text-white placeholder-[#444] outline-none transition focus:border-accent"
+              />
+            </div>
+
+            <button
+              onClick={() => navigate('/')}
+              className="flex w-full items-center justify-between rounded-[5px] bg-accent px-5 py-3.5 text-[13px] font-semibold text-black transition hover:bg-accent-hover"
+            >
+              <span>Enter Carefinder</span>
+              <ArrowRight className="size-4" strokeWidth={2.5} />
+            </button>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="h-px flex-1 bg-[#222]" />
+            <span className="text-[11px] text-[#444]">or</span>
+            <div className="h-px flex-1 bg-[#222]" />
+          </div>
+
+          <button
+            onClick={() => navigate('/')}
+            className="w-full rounded-[5px] border border-[#222] bg-transparent px-5 py-3 text-[13px] font-medium text-[#888] transition hover:border-[#444] hover:text-white"
+          >
+            Continue as guest →
+          </button>
+
+          <p className="text-[11px] text-[#333]">
+            Free for everyone in Nigeria. No data sold. No spam.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <span className="font-display text-[24px] font-bold text-white">2,000+</span>
+          <span className="text-[12px] text-[#555]">hospitals indexed across all 36 states</span>
+        </div>
+      </div>
+
+      <div className="relative hidden flex-1 overflow-hidden p-4 md:block">
+        <div
+          className="grid gap-2"
+          style={{
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gridTemplateRows: 'repeat(3, 1fr)',
+            height: '100%',
+          }}
+        >
+          {GRID_IMAGES.map((src, i) => (
+            <div
+              key={i}
+              className="overflow-hidden rounded-[5px]"
+              style={{ filter: 'grayscale(0.3) brightness(0.8)' }}
+            >
+              <img
+                src={src}
+                alt=""
+                className="h-full w-full object-cover transition duration-700 hover:scale-105 hover:brightness-110"
+              />
+            </div>
+          ))}
+        </div>
+
+        <div className="absolute bottom-8 left-8 flex flex-wrap gap-2">
+          {FEATURE_PILLS.map((pill) => (
+            <span
+              key={pill.label}
+              className="rounded-[5px] px-3 py-1.5 text-[11px] font-semibold"
+              style={
+                pill.accent
+                  ? { background: '#00e5d4', color: '#000' }
+                  : { background: 'rgba(0,0,0,0.75)', color: '#fff', border: '1px solid #333' }
+              }
+            >
+              {pill.label}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -17,7 +17,7 @@ export function Button({
     'inline-flex items-center justify-center gap-2 font-semibold transition-colors rounded-[5px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none';
 
   const variants: Record<string, string> = {
-    primary: 'bg-accent text-white hover:bg-accent-hover',
+    primary: 'bg-accent text-on-accent hover:bg-accent-hover',
     secondary: 'border border-line bg-surface text-ink hover:bg-muted',
     ghost: 'text-soft hover:text-ink hover:bg-muted',
     danger: 'bg-error-bg text-error border border-error-border hover:bg-red-100',
