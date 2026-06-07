@@ -5,6 +5,7 @@ import { Modal } from '../../components/ui/Modal';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { useShareLink } from './useShareLink';
+import { supabase } from '../../lib/supabase';
 import type { Hospital } from '../../types/hospital';
 
 interface ShareModalProps {
@@ -30,7 +31,7 @@ export function ShareModal({ open, onClose, hospitals }: ShareModalProps) {
     setTimeout(() => setCopied(false), 2000);
   }
 
-  async function handleEmailShare(e: React.FormEvent) {
+  async function handleEmailShare(e: React.SyntheticEvent) {
     e.preventDefault();
     if (!email.trim() || !email.includes('@')) {
       setEmailError('Enter a valid email address.');
@@ -39,11 +40,10 @@ export function ShareModal({ open, onClose, hospitals }: ShareModalProps) {
     setEmailError('');
     setSending(true);
     try {
-      await fetch('/api/share-hospitals', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ to: email, hospitals: hospitals.slice(0, 50), shareUrl }),
+      const { error: fnError } = await supabase.functions.invoke('share-hospitals', {
+        body: { to: email, hospitals: hospitals.slice(0, 50), shareUrl },
       });
+      if (fnError) throw fnError;
       setSent(true);
     } catch {
       setEmailError('Failed to send email. Please try again.');
