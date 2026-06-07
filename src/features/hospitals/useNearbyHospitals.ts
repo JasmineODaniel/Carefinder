@@ -4,11 +4,6 @@ import type { Hospital } from '../../types/hospital';
 
 export type HospitalWithDistance = Hospital & { distance_km: number };
 
-interface RpcRow {
-  hospital: Hospital;
-  distance_km: number;
-}
-
 export function useNearbyHospitals(
   coords: { lat: number; lng: number } | null,
   radiusKm: number | null,
@@ -37,9 +32,7 @@ export function useNearbyHospitals(
           setError(rpcError.message);
           setData([]);
         } else {
-          setData(
-            ((rows ?? []) as RpcRow[]).map((r) => ({ ...r.hospital, distance_km: r.distance_km })),
-          );
+          setData((rows ?? []) as HospitalWithDistance[]);
         }
         setLoading(false);
       });
