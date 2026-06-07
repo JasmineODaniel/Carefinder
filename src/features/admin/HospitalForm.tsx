@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Upload, X, Image as ImageIcon } from 'lucide-react';
 import { z } from 'zod';
 import MDEditor from '@uiw/react-md-editor';
 import '@uiw/react-md-editor/markdown-editor.css';
@@ -8,12 +9,14 @@ import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import type { Hospital } from '../../types/hospital';
 
+const PHONE_RE = /^\+?[\d\s\-()+]{7,}$/;
+
 const HospitalSchema = z.object({
   name: z.string().min(2, 'Hospital name is required'),
   address: z.string().min(5, 'Address is required'),
   city: z.string().optional(),
   lga: z.string().optional(),
-  phone: z.string().regex(/^\+?[\d\s\-()+]{7,}$/, 'Enter a valid phone number'),
+  phone: z.string().refine((v) => PHONE_RE.test(v), 'Enter a valid phone number'),
   email: z.union([z.string().email('Enter a valid email'), z.literal('')]).optional(),
   ownership: z.enum(['public', 'private']),
   specialties: z.string(),
@@ -48,11 +51,18 @@ const EMPTY: FormData = {
   lng: null,
 };
 
+const BUCKET = 'hospital-photos';
+const MAX_BYTES = 5 * 1024 * 1024;
+
 export function HospitalForm({ open, onClose, hospital, onSaved }: HospitalFormProps) {
   const [form, setForm] = useState<FormData>(EMPTY);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [photoError, setPhotoError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -71,11 +81,14 @@ export function HospitalForm({ open, onClose, hospital, onSaved }: HospitalFormP
         lat: hospital.lat ?? null,
         lng: hospital.lng ?? null,
       });
+      setPhotoUrl(hospital.photo_url ?? null);
     } else {
       setForm(EMPTY);
+      setPhotoUrl(null);
     }
     setErrors({});
     setServerError(null);
+    setPhotoError(null);
   }, [hospital, open]);
 
   function set<K extends keyof FormData>(key: K, value: FormData[K]) {
@@ -83,7 +96,38 @@ export function HospitalForm({ open, onClose, hospital, onSaved }: HospitalFormP
     setErrors((prev) => ({ ...prev, [key]: undefined }));
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handlePhotoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    e.target.value = '';
+
+    if (file.size > MAX_BYTES) {
+      setPhotoError('File too large — max 5 MB');
+      return;
+    }
+
+    const ext = file.name.split('.').pop()?.toLowerCase() ?? 'jpg';
+    const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+
+    setUploadingPhoto(true);
+    setPhotoError(null);
+
+    const { error: upErr } = await supabase.storage
+      .from(BUCKET)
+      .upload(path, file, { cacheControl: '3600', upsert: false });
+
+    if (upErr) {
+      setPhotoError(upErr.message);
+      setUploadingPhoto(false);
+      return;
+    }
+
+    const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+    setPhotoUrl(data.publicUrl);
+    setUploadingPhoto(false);
+  }
+
+  async function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
     const result = HospitalSchema.safeParse(form);
     if (!result.success) {
@@ -105,6 +149,7 @@ export function HospitalForm({ open, onClose, hospital, onSaved }: HospitalFormP
         .split(',')
         .map((s) => s.trim())
         .filter(Boolean),
+      photo_url: photoUrl,
     };
 
     const { error } = hospital
@@ -232,6 +277,53 @@ export function HospitalForm({ open, onClose, hospital, onSaved }: HospitalFormP
         </div>
 
         <div className="flex flex-col gap-1.5">
+          <span className="text-[13px] font-medium text-ink">Hospital photo</span>
+          <div className="flex items-start gap-4">
+            {photoUrl ? (
+              <div className="relative shrink-0">
+                <img
+                  src={photoUrl}
+                  alt="Hospital preview"
+                  className="h-20 w-28 rounded-[5px] border border-line object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => setPhotoUrl(null)}
+                  aria-label="Remove photo"
+                  className="absolute -right-2 -top-2 grid size-5 place-items-center rounded-full border border-line bg-surface text-soft hover:text-error"
+                >
+                  <X className="size-3" strokeWidth={2.5} />
+                </button>
+              </div>
+            ) : (
+              <div className="grid h-20 w-28 shrink-0 place-items-center rounded-[5px] border border-dashed border-line bg-muted">
+                <ImageIcon className="size-6 text-soft" strokeWidth={1.5} />
+              </div>
+            )}
+
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="photo-upload"
+                className={`flex cursor-pointer items-center gap-2 self-start rounded-[5px] border border-line bg-surface px-3 py-2 text-[13px] font-medium text-ink transition-colors hover:bg-muted ${uploadingPhoto ? 'pointer-events-none opacity-60' : ''}`}
+              >
+                <Upload className="size-4" strokeWidth={2} />
+                {uploadingPhoto ? 'Uploading…' : photoUrl ? 'Replace photo' : 'Upload photo'}
+                <input
+                  id="photo-upload"
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="sr-only"
+                  onChange={handlePhotoUpload}
+                  disabled={uploadingPhoto}
+                />
+              </label>
+              <p className="text-[11px] text-soft">JPG, PNG or WebP · max 5 MB</p>
+              {photoError && <p className="text-[12px] text-error">{photoError}</p>}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-1.5">
           <span className="text-[13px] font-medium text-ink">Description (Markdown)</span>
           <div data-color-mode="light">
             <MDEditor
@@ -253,7 +345,7 @@ export function HospitalForm({ open, onClose, hospital, onSaved }: HospitalFormP
           <Button variant="secondary" type="button" onClick={onClose}>
             Cancel
           </Button>
-          <Button type="submit" disabled={submitting}>
+          <Button type="submit" disabled={submitting || uploadingPhoto}>
             {submitting ? 'Saving…' : hospital ? 'Save changes' : 'Add hospital'}
           </Button>
         </div>

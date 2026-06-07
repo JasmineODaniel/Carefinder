@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Map as MapIcon } from 'lucide-react';
@@ -17,20 +17,39 @@ export function HospitalMap({ hospitals, center, onSelect }: HospitalMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
-  const loadedRef = useRef(false);
   const onSelectRef = useRef(onSelect);
-  onSelectRef.current = onSelect;
+  const [mapLoaded, setMapLoaded] = useState(false);
+
+  useEffect(() => {
+    onSelectRef.current = onSelect;
+  });
+
+  useEffect(() => {
+    if (!MAPBOX_TOKEN || !containerRef.current) return;
+    const map = new mapboxgl.Map({
+      container: containerRef.current,
+      style: 'mapbox://styles/mapbox/dark-v11',
+      center: center ? [center.lng, center.lat] : [8.6753, 9.082],
+      zoom: center ? 11 : 5,
+    });
+    mapRef.current = map;
+    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    map.on('load', () => setMapLoaded(true));
+    return () => {
+      map.remove();
+      setMapLoaded(false);
+    };
+  }, []);
 
   const placeMarkers = useCallback((map: mapboxgl.Map, list: Hospital[]) => {
     markersRef.current.forEach((m) => m.remove());
     markersRef.current = [];
-
     list.forEach((h) => {
       if (h.lat == null || h.lng == null) return;
 
       const el = document.createElement('div');
       el.style.cssText =
-        'width:30px;height:30px;border-radius:5px;background:#00e5d4;border:2px solid #fff;box-shadow:0 2px 10px rgba(0,229,212,0.4);cursor:pointer;display:flex;align-items:center;justify-content:center;color:#000;font-size:13px;font-weight:700;';
+        'width:30px;height:30px;border-radius:5px;background:#00e5d4;border:2px solid rgba(255,255,255,0.15);box-shadow:0 2px 10px rgba(0,229,212,0.4);cursor:pointer;display:flex;align-items:center;justify-content:center;color:#000;font-size:13px;font-weight:700;';
       el.textContent = '+';
       el.setAttribute('aria-label', h.name);
       el.setAttribute('role', 'button');
@@ -55,32 +74,10 @@ export function HospitalMap({ hospitals, center, onSelect }: HospitalMapProps) {
   }, []);
 
   useEffect(() => {
-    if (!MAPBOX_TOKEN || !containerRef.current) return;
-    const map = new mapboxgl.Map({
-      container: containerRef.current,
-      style: 'mapbox://styles/mapbox/dark-v11',
-      center: center ? [center.lng, center.lat] : [8.6753, 9.082],
-      zoom: center ? 11 : 5,
-    });
-    mapRef.current = map;
-    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
-    map.on('load', () => {
-      loadedRef.current = true;
-      placeMarkers(map, hospitals);
-    });
-    return () => {
-      loadedRef.current = false;
-      map.remove();
-    };
-  }, []);
-
-  useEffect(() => {
     const map = mapRef.current;
-    if (!map || !MAPBOX_TOKEN) return;
-    if (loadedRef.current) {
-      placeMarkers(map, hospitals);
-    }
-  }, [hospitals, placeMarkers]);
+    if (!map || !mapLoaded || !MAPBOX_TOKEN) return;
+    placeMarkers(map, hospitals);
+  }, [hospitals, mapLoaded, placeMarkers]);
 
   useEffect(() => {
     if (center && mapRef.current && MAPBOX_TOKEN) {

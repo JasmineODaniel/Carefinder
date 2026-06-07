@@ -14,6 +14,7 @@ export interface Hospital {
   description: string | null;
   lat: number | null;
   lng: number | null;
+  photo_url: string | null;
   rating?: number | null;
   review_count?: number;
 }
