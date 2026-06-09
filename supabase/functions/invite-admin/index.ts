@@ -34,7 +34,8 @@ serve(async (req) => {
     })
   }
 
-  if (user.user_metadata?.role !== 'admin') {
+  const role = user.app_metadata?.role ?? user.user_metadata?.role
+  if (role !== 'admin') {
     return new Response(JSON.stringify({ error: 'Forbidden — admin role required' }), {
       status: 403,
       headers: { 'Content-Type': 'application/json', ...CORS },
