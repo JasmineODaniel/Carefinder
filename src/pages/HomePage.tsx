@@ -88,15 +88,14 @@ const FEATURES = [
 ];
 
 const RIGHT_GRID_IMAGES = [
-  'https://images.unsplash.com/photo-1551190822-a9333d879b1f?auto=format&w=240&q=80',
-  'https://images.unsplash.com/photo-1538108149393-fbbd81895907?auto=format&w=240&q=80',
-  'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&w=240&q=80',
-  'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&w=240&q=80',
-  'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&w=240&q=80',
-  'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&w=240&q=80',
-  'https://images.unsplash.com/photo-1576671081837-49000212a370?auto=format&w=240&q=80',
-  'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&w=240&q=80',
-  'https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?auto=format&w=240&q=80',
+  '/assets/hop1.jpg',
+  '/assets/hop2.jpg',
+  '/assets/hop3.jpg',
+  '/assets/hop4.jpg',
+  '/assets/hop5.jpg',
+  '/assets/hop6.jpg',
+  '/assets/hop7.jpg',
+  '/assets/hop8.jpg',
 ];
 
 const ROBOT_IMG =
@@ -106,7 +105,7 @@ export function HomePage() {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
 
-  function handleSearch(e: React.FormEvent<HTMLFormElement>) {
+  function handleSearch(e: { preventDefault(): void }) {
     e.preventDefault();
     navigate(`/search${query.trim() ? `?q=${encodeURIComponent(query.trim())}` : ''}`);
   }
@@ -115,47 +114,55 @@ export function HomePage() {
     <PageLayout>
 
       {/* HERO — 3-PANEL LAYOUT */}
-      <section className="bg-[#0a0a0a]">
+      <section className="bg-white">
         <div
           className="grid min-h-[calc(100vh-56px)]"
           style={{ gridTemplateColumns: '1fr 0.65fr 0.9fr' }}
         >
 
-          {/* PANEL 1 — white, headline + search + robot image */}
-          <div className="flex flex-col justify-between border-r border-[#1a1a1a] bg-white p-8 lg:p-10">
+          {/* PANEL 1 — sketch bg, headline + search + robot image */}
+          <div
+            className="relative flex flex-col justify-between border-r border-[#e2e8f0] p-8 lg:p-10"
+            style={{
+              backgroundImage: "url('/panel3-bg.jpg')",
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          >
+            <div className="absolute inset-0 bg-black/40" />
 
-            <div>
-              <span className="inline-flex items-center gap-1.5 rounded-[5px] border border-[#e2e8f0] bg-[#f8fafc] px-2.5 py-1 text-[10px] font-semibold tracking-[0.18em] text-[#64748b]">
+            <div className="relative z-10">
+              <span className="inline-flex items-center gap-1.5 rounded-[5px] border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] font-semibold tracking-[0.18em] text-white/80">
                 <span className="size-1.5 rounded-full bg-accent" />
                 NIGERIA'S HOSPITAL DIRECTORY
               </span>
 
-              <h1 className="mt-5 font-display text-[48px] leading-[1.05] tracking-tight text-black lg:text-[56px]">
-                Find the<br />
-                Right<br />
-                <span className="inline-block rounded-[5px] bg-black px-3 py-1 text-accent">
+              <h1 className="mt-5 font-display text-[48px] leading-[1.05] tracking-tight text-white lg:text-[56px]">
+                Find the Right
+                <br />
+                <span className="mt-1 inline-block rounded-[5px] bg-accent px-3 py-1 text-black">
                   Hospital.
                 </span>
               </h1>
 
-              <p className="mt-5 max-w-xs text-[14px] leading-relaxed text-[#64748b]">
+              <p className="mt-5 max-w-xs text-[14px] leading-relaxed text-white/70">
                 Search 2,000+ verified hospitals across Nigeria by specialty, city, or proximity — free for everyone.
               </p>
 
               <form onSubmit={handleSearch} className="mt-6 flex gap-2">
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#94a3b8]" strokeWidth={2} />
+                  <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-white/50" strokeWidth={2} />
                   <input
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Hospital name, city or LGA…"
-                    className="w-full rounded-[5px] border border-[#e2e8f0] bg-[#f8fafc] py-3 pl-9 pr-3 text-[13px] text-[#0f172a] placeholder-[#94a3b8] outline-none transition focus:border-accent focus:bg-white"
+                    className="w-full rounded-[5px] border border-white/20 bg-white/10 py-3 pl-9 pr-3 text-[13px] text-white placeholder-white/40 outline-none backdrop-blur-sm transition focus:border-accent focus:bg-white/20"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="rounded-[5px] bg-black px-5 py-3 text-[12px] font-semibold text-white transition hover:bg-accent hover:text-black"
+                  className="rounded-[5px] bg-accent px-5 py-3 text-[12px] font-semibold text-black transition hover:bg-white"
                 >
                   SEARCH
                 </button>
@@ -166,7 +173,7 @@ export function HomePage() {
                   <button
                     key={s}
                     onClick={() => navigate(`/search?specialty=${encodeURIComponent(s)}`)}
-                    className="rounded-[5px] border border-[#e2e8f0] px-3 py-1 text-[11px] text-[#64748b] transition hover:border-accent hover:text-accent"
+                    className="rounded-[5px] border border-white/20 bg-white/10 px-3 py-1 text-[11px] text-white/70 transition hover:border-accent hover:text-accent"
                   >
                     {s}
                   </button>
@@ -174,7 +181,7 @@ export function HomePage() {
               </div>
             </div>
 
-            <div className="relative mt-8 overflow-hidden rounded-[5px]" style={{ height: 240 }}>
+            <div className="relative z-10 mt-8 overflow-hidden rounded-[5px]" style={{ height: 240 }}>
               <img
                 src={ROBOT_IMG}
                 alt="AI medical assistance"
@@ -182,29 +189,18 @@ export function HomePage() {
                 style={{ filter: 'grayscale(0.15)' }}
               />
               <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/20 to-transparent p-5">
-                <div className="flex items-end justify-between">
-                  <div>
-                    <p className="text-[10px] font-semibold tracking-widest text-accent">
-                      AI-ASSISTED SEARCH
-                    </p>
-                    <p className="mt-1 font-display text-[18px] font-bold text-white">
-                      2,000+ Records
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => navigate('/search')}
-                    className="flex items-center gap-1.5 rounded-[5px] bg-accent px-4 py-2 text-[11px] font-bold text-black transition hover:bg-white"
-                  >
-                    SEARCH NOW
-                    <ArrowRight className="size-3.5" strokeWidth={2.5} />
-                  </button>
-                </div>
+                <p className="text-[10px] font-semibold tracking-widest text-accent">
+                  AI-ASSISTED SEARCH
+                </p>
+                <p className="mt-1 font-display text-[18px] font-bold text-white">
+                  2,000+ Records
+                </p>
               </div>
             </div>
           </div>
 
-          {/* PANEL 2 — black + aqua, stats */}
-          <div className="flex flex-col border-r border-[#1a1a1a]">
+          {/* PANEL 2 — aqua top + white bottom, stats */}
+          <div className="flex flex-col border-r border-[#e2e8f0]">
 
             <div className="flex flex-1 flex-col justify-between bg-accent p-7">
               <div className="flex items-center justify-between">
@@ -231,38 +227,38 @@ export function HomePage() {
 
             <div className="relative flex items-center justify-center" style={{ height: 0 }}>
               <div
-                className="absolute z-10 grid size-12 place-items-center rounded-full border-4 border-[#0a0a0a] bg-accent"
+                className="absolute z-10 grid size-12 place-items-center rounded-full border-4 border-white bg-accent"
                 style={{ top: '-24px' }}
               >
                 <Star className="size-5 fill-black text-black" strokeWidth={0} />
               </div>
             </div>
 
-            <div className="flex flex-1 flex-col justify-between bg-[#0a0a0a] p-7 pt-10">
+            <div className="flex flex-1 flex-col justify-between bg-white p-7 pt-10">
               <div className="flex items-center justify-between">
-                <div className="grid size-9 place-items-center rounded-full border border-[#222] bg-[#111]">
+                <div className="grid size-9 place-items-center rounded-full border border-[#e2e8f0] bg-[#f8fafc]">
                   <Globe className="size-4 text-accent" strokeWidth={1.8} />
                 </div>
-                <span className="text-[10px] font-semibold tracking-widest text-[#444]">
+                <span className="text-[10px] font-semibold tracking-widest text-[#cbd5e1]">
                   STATES
                 </span>
               </div>
 
               <div>
-                <p className="font-display text-[52px] font-black leading-none text-white">
+                <p className="font-display text-[52px] font-black leading-none text-[#0f172a]">
                   36
                 </p>
                 <p className="mt-1 text-[11px] font-bold tracking-widest text-accent">
                   COVERED
                 </p>
-                <p className="mt-2 text-[12px] leading-snug text-[#444]">
+                <p className="mt-2 text-[12px] leading-snug text-[#94a3b8]">
                   From Lagos Island to the most rural LGAs — nationwide.
                 </p>
               </div>
 
               <button
                 onClick={() => navigate('/search?view=map')}
-                className="flex w-full items-center justify-between rounded-[5px] border border-[#222] px-4 py-2.5 text-[11px] font-semibold text-[#888] transition hover:border-accent hover:text-accent"
+                className="flex w-full items-center justify-between rounded-[5px] border border-[#e2e8f0] px-4 py-2.5 text-[11px] font-semibold text-[#64748b] transition hover:border-accent hover:text-accent"
               >
                 <span>EXPLORE THE MAP</span>
                 <ArrowRight className="size-3.5" strokeWidth={2.5} />
@@ -277,12 +273,6 @@ export function HomePage() {
               <span className="text-[10px] font-semibold tracking-[0.2em] text-[#333]">
                 HOSPITALS ACROSS NIGERIA
               </span>
-              <button
-                onClick={() => navigate('/search')}
-                className="flex items-center gap-1 text-[10px] font-semibold text-accent transition hover:text-white"
-              >
-                VIEW ALL <ArrowRight className="size-2.5" strokeWidth={2.5} />
-              </button>
             </div>
 
             <div className="grid flex-1 grid-cols-3 gap-2" style={{ gridTemplateRows: 'repeat(3, 1fr)' }}>
@@ -312,23 +302,23 @@ export function HomePage() {
       </section>
 
       {/* STATS BAR */}
-      <section className="border-b border-[#1a1a1a] bg-[#0d0d0d]">
+      <section className="border-b border-[#e2e8f0] bg-[#f8fafc]">
         <div className="mx-auto max-w-6xl px-6 py-8">
-          <div className="grid grid-cols-2 divide-x divide-[#1a1a1a] sm:grid-cols-4">
+          <div className="grid grid-cols-2 divide-x divide-[#e2e8f0] sm:grid-cols-4">
             {STATS.map((stat) => (
               <div key={stat.label} className="px-6 py-2 first:pl-0 last:pr-0">
-                <p className="font-display text-[28px] text-accent">
+                <p className="font-display text-[28px] font-black text-[#0f172a]">
                   {stat.value}
                 </p>
-                <p className="mt-0.5 text-[12px] text-[#555]">{stat.label}</p>
+                <p className="mt-0.5 text-[12px] font-semibold text-[#64748b]">{stat.label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section id="about" className="scroll-mt-6 border-b border-[#1a1a1a] bg-[#0a0a0a]">
+      {/* HOW IT WORKS — warm charcoal off-black sampled from panel image */}
+      <section id="about" className="scroll-mt-6 border-b border-[#2a2620] bg-[#1c1a17]">
         <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
           <p className="font-display text-[10px] tracking-[0.2em] text-accent">
             HOW IT WORKS
@@ -388,40 +378,54 @@ export function HomePage() {
       </section>
 
       {/* SPECIALTIES */}
-      <section className="border-b border-[#1a1a1a] bg-[#0d0d0d]">
-        <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
+      <section
+        className="relative overflow-hidden border-b border-[#e2e8f0]"
+        style={{
+          backgroundImage: "url('/assets/ink-bg.png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundColor: '#ffffff',
+        }}
+      >
+        <div className="absolute inset-0 bg-white/30" />
+        <div className="relative z-10 mx-auto max-w-6xl px-6 pb-10 pt-16 md:pt-20">
           <p className="font-display text-[10px] tracking-[0.2em] text-accent">
             BROWSE BY SPECIALTY
           </p>
-          <div className="mt-3 flex items-end justify-between gap-4">
-            <h2 className="font-display text-[24px] leading-tight text-white md:text-[30px]">
-              FIND EXACTLY WHAT YOU NEED.
-            </h2>
-            <button
-              onClick={() => navigate('/search')}
-              className="hidden shrink-0 items-center gap-1.5 rounded-[5px] border border-[#222] px-4 py-2 text-[13px] font-medium text-[#888] transition hover:border-accent hover:text-accent sm:flex"
-            >
-              View all
-              <ArrowRight className="size-3.5" strokeWidth={2} />
-            </button>
-          </div>
-          <div className="mt-8 grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4">
-            {SPECIALTIES.map((specialty) => (
-              <button
-                key={specialty}
-                onClick={() => navigate(`/search?specialty=${encodeURIComponent(specialty)}`)}
-                className="flex items-center justify-between rounded-[5px] border border-[#1a1a1a] bg-[#111] px-4 py-3 text-left text-[13px] font-medium text-[#888] transition hover:border-accent hover:text-accent"
+          <h2 className="mt-3 font-display text-[24px] leading-tight text-[#0f172a] md:text-[30px]">
+            FIND EXACTLY WHAT YOU NEED.
+          </h2>
+        </div>
+
+        <div className="relative z-10 flex flex-col gap-3 pb-14">
+          <div className="flex gap-3" style={{ animation: 'marquee-left 28s linear infinite', width: 'max-content' }}>
+            {[...SPECIALTIES, ...SPECIALTIES].map((s, i) => (
+              <div
+                key={i}
+                className="flex shrink-0 items-center gap-2 rounded-[5px] border border-[#e2e8f0] bg-white px-5 py-3 text-[13px] font-medium text-[#64748b]"
               >
-                <span>{specialty}</span>
-                <ArrowRight className="size-3.5 shrink-0 text-[#333]" strokeWidth={2} />
-              </button>
+                <span className="size-1.5 shrink-0 rounded-full bg-accent" />
+                {s}
+              </div>
+            ))}
+          </div>
+
+          <div className="flex gap-3" style={{ animation: 'marquee-right 22s linear infinite', width: 'max-content' }}>
+            {[...SPECIALTIES, ...SPECIALTIES].map((s, i) => (
+              <div
+                key={i}
+                className="flex shrink-0 items-center gap-2 rounded-[5px] border border-[#e2e8f0] bg-white/90 px-5 py-3 text-[13px] font-medium text-[#64748b]"
+              >
+                <span className="size-1.5 shrink-0 rounded-full bg-[#cbd5e1]" />
+                {s}
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* FEATURES */}
-      <section className="border-b border-[#1a1a1a] bg-[#0a0a0a]">
+      <section className="border-b border-[#2a2620] bg-[#1c1a18]">
         <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
           <p className="font-display text-[10px] tracking-[0.2em] text-accent">
             FEATURES
@@ -429,26 +433,26 @@ export function HomePage() {
           <h2 className="mt-3 font-display text-[24px] leading-tight text-white md:text-[30px]">
             BUILT FOR REAL USE.
           </h2>
-          <div className="mt-10 grid gap-px border border-[#1a1a1a] bg-[#1a1a1a] sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid gap-px border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map((feature) => (
               <div
                 key={feature.title}
-                className="flex flex-col gap-4 bg-[#0a0a0a] p-6 transition-colors hover:bg-[#111]"
+                className="flex flex-col gap-4 bg-black/30 p-6 backdrop-blur-sm transition-colors hover:bg-black/20"
               >
-                <span className="grid size-9 place-items-center rounded-[5px] bg-tint text-accent">
+                <span className="grid size-9 place-items-center rounded-[5px] bg-accent/20 text-accent">
                   <feature.icon className="size-[18px]" strokeWidth={2} />
                 </span>
                 <h3 className="font-display text-[12px] tracking-[0.12em] text-white">
                   {feature.title.toUpperCase()}
                 </h3>
-                <p className="text-[14px] leading-relaxed text-[#555]">{feature.body}</p>
+                <p className="text-[14px] leading-relaxed text-white/60">{feature.body}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA BANNER */}
+      {/* CTA BANNER — kept aqua as requested */}
       <section className="bg-accent">
         <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
