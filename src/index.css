@@ -1,5 +1,32 @@
 @import "tailwindcss";
 
+@keyframes scroll-up {
+  from { transform: translateY(0); }
+  to { transform: translateY(-50%); }
+}
+
+@keyframes scroll-down {
+  from { transform: translateY(-50%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes typewriter-loop {
+  0%   { width: 0;     animation-timing-function: steps(14, end); }
+  42%  { width: 9.5em; animation-timing-function: steps(1, end); }
+  58%  { width: 9.5em; animation-timing-function: steps(14, start); }
+  100% { width: 0; }
+}
+
 @theme {
   --color-accent: #00e5d4;
   --color-accent-hover: #00c4b6;

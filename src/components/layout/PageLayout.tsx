@@ -8,8 +8,16 @@ export function PageLayout({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen flex-col bg-canvas font-body text-ink">
       <Header />
       <main className="flex-1">{children}</main>
-      <footer className="border-t border-line bg-surface">
-        <div className="mx-auto max-w-6xl px-6 py-10">
+      <footer
+        className="relative border-t border-line bg-surface"
+        style={{
+          backgroundImage: "url('/assets/ink-bg.png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="absolute inset-0 bg-white/30" />
+        <div className="relative z-10 mx-auto max-w-6xl px-6 py-10">
           <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <Link to="/" className="flex items-center gap-2">
