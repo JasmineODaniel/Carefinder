@@ -31,7 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const isAdmin = user?.user_metadata?.role === 'admin' || !!user;
+  const isAdmin = user?.user_metadata?.role === 'admin';
 
   const signIn = async (email: string, password: string): Promise<string | null> => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
