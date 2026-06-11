@@ -27,6 +27,11 @@
   100% { width: 0; }
 }
 
+@keyframes slide-lr {
+  0%, 100% { transform: translateX(0); }
+  50%       { transform: translateX(-22%); }
+}
+
 @theme {
   --color-accent: #00e5d4;
   --color-accent-hover: #00c4b6;

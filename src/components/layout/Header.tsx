@@ -6,7 +6,7 @@ export function Header() {
   const navigate = useNavigate();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[#1a1a1a] bg-[#0a0a0a]">
+    <header className="sticky top-0 z-40 border-b border-[#1a1a1a] bg-[#1c1c1c]">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3.5">
 
         <Link to="/" className="flex shrink-0 items-center gap-2.5">

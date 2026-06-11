@@ -26,7 +26,7 @@ export function LoginPage() {
   const [email, setEmail] = useState('');
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-[#0a0a0a]">
+    <div className="flex h-screen w-full overflow-hidden bg-[#1c1c1c]">
 
       <div className="flex w-full flex-col justify-between p-10 md:w-[420px] lg:w-[480px]">
 
