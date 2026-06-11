@@ -12,7 +12,7 @@ export function Header() {
 
         <Link to="/" className="flex shrink-0 items-center gap-2.5">
           <span className="relative grid size-8 place-items-center rounded-[5px] bg-accent">
-            <HeartPulse className="size-4 text-black" strokeWidth={2.5} />
+            <HeartPulse className="size-4 text-on-accent" strokeWidth={2.5} />
           </span>
           <span className="font-display text-[13px] tracking-tight text-white">
             CARE<span className="text-accent">FINDER</span>
@@ -24,7 +24,7 @@ export function Header() {
             <>
               <button
                 onClick={() => navigate('/admin')}
-                className="rounded-[5px] bg-accent px-4 py-2 text-[12px] font-semibold text-black transition hover:bg-accent-hover"
+                className="rounded-[5px] bg-accent px-4 py-2 text-[12px] font-semibold text-on-accent transition hover:bg-accent-hover"
               >
                 Dashboard
               </button>
