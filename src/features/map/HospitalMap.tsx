@@ -49,14 +49,14 @@ export function HospitalMap({ hospitals, center, onSelect }: HospitalMapProps) {
 
       const el = document.createElement('div');
       el.style.cssText =
-        'width:30px;height:30px;border-radius:5px;background:#00e5d4;border:2px solid rgba(255,255,255,0.15);box-shadow:0 2px 10px rgba(0,229,212,0.4);cursor:pointer;display:flex;align-items:center;justify-content:center;color:#000;font-size:13px;font-weight:700;';
+        'width:30px;height:30px;border-radius:5px;background:var(--color-accent);border:2px solid rgba(255,255,255,0.15);box-shadow:0 2px 10px rgba(0,229,212,0.4);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--color-on-accent);font-size:13px;font-weight:700;';
       el.textContent = '+';
       el.setAttribute('aria-label', h.name);
       el.setAttribute('role', 'button');
       el.setAttribute('tabindex', '0');
 
       const popup = new mapboxgl.Popup({ offset: 12, closeButton: false }).setHTML(
-        `<div style="padding:8px 10px;font-size:13px;font-family:Outfit,sans-serif"><strong>${h.name}</strong><br><span style="color:#64748b">${h.city ?? ''}</span></div>`,
+        `<div style="padding:8px 10px;font-size:13px;font-family:Outfit,sans-serif"><strong>${h.name}</strong><br><span style="color:var(--color-soft)">${h.city ?? ''}</span></div>`,
       );
 
       const marker = new mapboxgl.Marker(el)
