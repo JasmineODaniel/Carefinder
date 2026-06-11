@@ -32,7 +32,7 @@ export function LoginPage() {
 
         <div className="flex items-center gap-2.5">
           <span className="grid size-7 place-items-center rounded-full bg-accent">
-            <Plus className="size-4 text-black" strokeWidth={2.5} />
+            <Plus className="size-4 text-on-accent" strokeWidth={2.5} />
           </span>
           <span className="font-display text-[13px] tracking-tight text-white">
             Carefinder°
@@ -68,7 +68,7 @@ export function LoginPage() {
 
             <button
               onClick={() => navigate('/')}
-              className="flex w-full items-center justify-between rounded-[5px] bg-accent px-5 py-3.5 text-[13px] font-semibold text-black transition hover:bg-accent-hover"
+              className="flex w-full items-center justify-between rounded-[5px] bg-accent px-5 py-3.5 text-[13px] font-semibold text-on-accent transition hover:bg-accent-hover"
             >
               <span>Enter Carefinder</span>
               <ArrowRight className="size-4" strokeWidth={2.5} />
@@ -127,12 +127,11 @@ export function LoginPage() {
           {FEATURE_PILLS.map((pill) => (
             <span
               key={pill.label}
-              className="rounded-[5px] px-3 py-1.5 text-[11px] font-semibold"
-              style={
+              className={`rounded-[5px] px-3 py-1.5 text-[11px] font-semibold ${
                 pill.accent
-                  ? { background: '#00e5d4', color: '#000' }
-                  : { background: 'rgba(0,0,0,0.75)', color: '#fff', border: '1px solid #333' }
-              }
+                  ? 'bg-accent text-on-accent'
+                  : 'border border-white/20 bg-black/75 text-white'
+              }`}
             >
               {pill.label}
             </span>
