@@ -4,13 +4,10 @@ import {
   Download,
   Share2,
   MapPin,
-  ArrowRight,
   Shield,
   Clock,
   Globe,
   Search,
-  Star,
-  Plus,
 } from 'lucide-react';
 import { PageLayout } from '../components/layout/PageLayout';
 
@@ -54,6 +51,21 @@ const SPECIALTIES = [
   'Radiology',
 ];
 
+const SPECIALTY_BUBBLES: { name: string; size: number; cx: number; cy: number; variant: 'accent' | 'dark' | 'outline' }[] = [
+  { name: 'Emergency',        size: 86,  cx: 351, cy: 209, variant: 'accent'  },
+  { name: 'Cardiology',       size: 92,  cx: 183, cy: 254, variant: 'dark'    },
+  { name: 'Dental',           size: 80,  cx: 322, cy: 371, variant: 'outline' },
+  { name: 'General Medicine', size: 110, cx: 459, cy: 232, variant: 'outline' },
+  { name: 'Dermatology',      size: 102, cx: 248, cy: 98,  variant: 'accent'  },
+  { name: 'Maternity',        size: 104, cx: 112, cy: 358, variant: 'dark'    },
+  { name: 'Pediatrics',       size: 98,  cx: 432, cy: 386, variant: 'outline' },
+  { name: 'Ophthalmology',    size: 94,  cx: 570, cy: 280, variant: 'dark'    },
+  { name: 'Oncology',         size: 88,  cx: 485, cy: 75,  variant: 'accent'  },
+  { name: 'Orthopedics',      size: 86,  cx: 75,  cy: 75,  variant: 'outline' },
+  { name: 'Psychiatry',       size: 82,  cx: 75,  cy: 485, variant: 'dark'    },
+  { name: 'Radiology',        size: 88,  cx: 485, cy: 485, variant: 'outline' },
+];
+
 const FEATURES = [
   {
     icon: MapPin,
@@ -87,20 +99,6 @@ const FEATURES = [
   },
 ];
 
-const RIGHT_GRID_IMAGES = [
-  '/assets/hop1.jpg',
-  '/assets/hop2.jpg',
-  '/assets/hop3.jpg',
-  '/assets/hop4.jpg',
-  '/assets/hop5.jpg',
-  '/assets/hop6.jpg',
-  '/assets/hop7.jpg',
-  '/assets/hop8.jpg',
-];
-
-const ROBOT_IMG =
-  'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&w=600&q=80';
-
 export function HomePage() {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
@@ -113,211 +111,115 @@ export function HomePage() {
   return (
     <PageLayout>
 
-      {/* HERO — 3-PANEL LAYOUT */}
-      <section className="bg-white">
+      <section className="relative min-h-[calc(100vh-56px)] overflow-hidden bg-[#f8f9fb]">
+
         <div
-          className="grid min-h-[calc(100vh-56px)]"
-          style={{ gridTemplateColumns: '1fr 0.65fr 0.9fr' }}
-        >
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage:
+              'linear-gradient(#dde3ec 1px, transparent 1px), linear-gradient(to right, #dde3ec 1px, transparent 1px)',
+            backgroundSize: '68px 68px',
+          }}
+        />
 
-          {/* PANEL 1 — sketch bg, headline + search + robot image */}
-          <div
-            className="relative flex flex-col justify-between border-r border-[#e2e8f0] p-8 lg:p-10"
-            style={{
-              backgroundImage: "url('/panel3-bg.jpg')",
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
-          >
-            <div className="absolute inset-0 bg-black/40" />
-
-            <div className="relative z-10">
-              <span className="inline-flex items-center gap-1.5 rounded-[5px] border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] font-semibold tracking-[0.18em] text-white/80">
-                <span className="size-1.5 rounded-full bg-accent" />
-                NIGERIA'S HOSPITAL DIRECTORY
-              </span>
-
-              <h1 className="mt-5 font-display text-[48px] leading-[1.05] tracking-tight text-white lg:text-[56px]">
-                Find the Right
-                <br />
-                <span className="mt-1 inline-block rounded-[5px] bg-accent px-3 py-1 text-black">
-                  Hospital.
-                </span>
-              </h1>
-
-              <p className="mt-5 max-w-xs text-[14px] leading-relaxed text-white/70">
-                Search 2,000+ verified hospitals across Nigeria by specialty, city, or proximity — free for everyone.
-              </p>
-
-              <form onSubmit={handleSearch} className="mt-6 flex gap-2">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-white/50" strokeWidth={2} />
-                  <input
-                    type="text"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Hospital name, city or LGA…"
-                    className="w-full rounded-[5px] border border-white/20 bg-white/10 py-3 pl-9 pr-3 text-[13px] text-white placeholder-white/40 outline-none backdrop-blur-sm transition focus:border-accent focus:bg-white/20"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="rounded-[5px] bg-accent px-5 py-3 text-[12px] font-semibold text-black transition hover:bg-white"
-                >
-                  SEARCH
-                </button>
-              </form>
-
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {['Cardiology', 'Maternity', 'Emergency', 'Pediatrics'].map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => navigate(`/search?specialty=${encodeURIComponent(s)}`)}
-                    className="rounded-[5px] border border-white/20 bg-white/10 px-3 py-1 text-[11px] text-white/70 transition hover:border-accent hover:text-accent"
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="relative z-10 mt-8 overflow-hidden rounded-[5px]" style={{ height: 240 }}>
-              <img
-                src={ROBOT_IMG}
-                alt="AI medical assistance"
-                className="h-full w-full object-cover"
-                style={{ filter: 'grayscale(0.15)' }}
-              />
-              <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/20 to-transparent p-5">
-                <p className="text-[10px] font-semibold tracking-widest text-accent">
-                  AI-ASSISTED SEARCH
-                </p>
-                <p className="mt-1 font-display text-[18px] font-bold text-white">
-                  2,000+ Records
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* PANEL 2 — aqua top + white bottom, stats */}
-          <div className="flex flex-col border-r border-[#e2e8f0]">
-
-            <div className="flex flex-1 flex-col justify-between bg-accent p-7">
-              <div className="flex items-center justify-between">
-                <div className="grid size-9 place-items-center rounded-full bg-black">
-                  <Plus className="size-4 text-accent" strokeWidth={2.5} />
-                </div>
-                <span className="text-[10px] font-semibold tracking-widest text-black/60">
-                  HOSPITALS
-                </span>
-              </div>
-
-              <div>
-                <p className="font-display text-[52px] font-black leading-none text-black">
-                  2K+
-                </p>
-                <p className="mt-1 text-[11px] font-bold tracking-widest text-black">
-                  INDEXED
-                </p>
-                <p className="mt-2 text-[12px] leading-snug text-black/60">
-                  Verified across all 36 states and the FCT of Nigeria.
-                </p>
-              </div>
-            </div>
-
-            <div className="relative flex items-center justify-center" style={{ height: 0 }}>
-              <div
-                className="absolute z-10 grid size-12 place-items-center rounded-full border-4 border-white bg-accent"
-                style={{ top: '-24px' }}
-              >
-                <Star className="size-5 fill-black text-black" strokeWidth={0} />
-              </div>
-            </div>
-
-            <div className="flex flex-1 flex-col justify-between bg-white p-7 pt-10">
-              <div className="flex items-center justify-between">
-                <div className="grid size-9 place-items-center rounded-full border border-[#e2e8f0] bg-[#f8fafc]">
-                  <Globe className="size-4 text-accent" strokeWidth={1.8} />
-                </div>
-                <span className="text-[10px] font-semibold tracking-widest text-[#cbd5e1]">
-                  STATES
-                </span>
-              </div>
-
-              <div>
-                <p className="font-display text-[52px] font-black leading-none text-[#0f172a]">
-                  36
-                </p>
-                <p className="mt-1 text-[11px] font-bold tracking-widest text-accent">
-                  COVERED
-                </p>
-                <p className="mt-2 text-[12px] leading-snug text-[#94a3b8]">
-                  From Lagos Island to the most rural LGAs — nationwide.
-                </p>
-              </div>
-
-              <button
-                onClick={() => navigate('/search?view=map')}
-                className="flex w-full items-center justify-between rounded-[5px] border border-[#e2e8f0] px-4 py-2.5 text-[11px] font-semibold text-[#64748b] transition hover:border-accent hover:text-accent"
-              >
-                <span>EXPLORE THE MAP</span>
-                <ArrowRight className="size-3.5" strokeWidth={2.5} />
-              </button>
-            </div>
-          </div>
-
-          {/* PANEL 3 — dark, 3×3 image bento */}
-          <div className="flex flex-col gap-0 bg-[#0a0a0a] p-4">
-
-            <div className="mb-3 flex items-center justify-between">
-              <span className="text-[10px] font-semibold tracking-[0.2em] text-[#333]">
-                HOSPITALS ACROSS NIGERIA
-              </span>
-            </div>
-
-            <div className="grid flex-1 grid-cols-3 gap-2" style={{ gridTemplateRows: 'repeat(3, 1fr)' }}>
-              {RIGHT_GRID_IMAGES.map((src, i) => (
-                <div
-                  key={i}
-                  className="overflow-hidden"
-                  style={{ borderRadius: '10px', filter: 'grayscale(0.4) brightness(0.8)' }}
-                >
-                  <img
-                    src={src}
-                    alt=""
-                    className="h-full w-full object-cover transition duration-500 hover:scale-110 hover:grayscale-0 hover:brightness-100"
-                  />
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-3 flex items-center gap-2 rounded-[5px] border border-[#1a1a1a] bg-[#111] px-4 py-2.5">
-              <Shield className="size-3.5 text-accent" strokeWidth={2} />
-              <span className="text-[11px] text-[#555]">
-                All records verified by our admin team
-              </span>
-            </div>
+        <div className="pointer-events-none absolute hidden lg:block" style={{ top: 68, left: 68 }}>
+          <div className="size-[68px] overflow-hidden rounded-[5px] shadow-[0_4px_24px_rgba(0,0,0,0.14)] ring-2 ring-white">
+            <img src="/assets/hop1.jpg" alt="" className="h-full w-full object-cover" style={{ filter: 'brightness(0.8) grayscale(0.2)' }} />
           </div>
         </div>
-      </section>
 
-      {/* STATS BAR */}
-      <section className="border-b border-[#e2e8f0] bg-[#f8fafc]">
-        <div className="mx-auto max-w-6xl px-6 py-8">
-          <div className="grid grid-cols-2 divide-x divide-[#e2e8f0] sm:grid-cols-4">
+        <div className="pointer-events-none absolute hidden lg:block" style={{ top: 204, left: 136 }}>
+          <div className="size-[68px] overflow-hidden rounded-[5px] shadow-[0_4px_24px_rgba(0,0,0,0.14)] ring-2 ring-white">
+            <img src="/assets/hop2.jpg" alt="" className="h-full w-full object-cover" style={{ filter: 'brightness(0.8) grayscale(0.2)' }} />
+          </div>
+        </div>
+
+        <div className="pointer-events-none absolute hidden lg:block" style={{ top: 68, right: 136 }}>
+          <div className="size-[68px] overflow-hidden rounded-[5px] shadow-[0_4px_24px_rgba(0,0,0,0.14)] ring-2 ring-white">
+            <img src="/assets/hop3.jpg" alt="" className="h-full w-full object-cover" style={{ filter: 'brightness(0.8) grayscale(0.2)' }} />
+          </div>
+        </div>
+
+        <div className="pointer-events-none absolute hidden lg:block" style={{ top: 340, right: 68 }}>
+          <div className="size-[68px] overflow-hidden rounded-[5px] shadow-[0_4px_24px_rgba(0,0,0,0.14)] ring-2 ring-white">
+            <img src="/assets/hop4.jpg" alt="" className="h-full w-full object-cover" style={{ filter: 'brightness(0.8) grayscale(0.2)' }} />
+          </div>
+        </div>
+
+        <div className="pointer-events-none absolute hidden lg:block" style={{ bottom: 144, left: 68 }}>
+          <div className="size-[68px] overflow-hidden rounded-[5px] shadow-[0_4px_24px_rgba(0,0,0,0.14)] ring-2 ring-white">
+            <img src="/assets/hop5.jpg" alt="" className="h-full w-full object-cover" style={{ filter: 'brightness(0.8) grayscale(0.2)' }} />
+          </div>
+        </div>
+
+        <div
+          className="pointer-events-none absolute hidden size-[18px] rounded-full bg-accent shadow-lg shadow-accent/40 lg:block"
+          style={{ bottom: 144, right: 68 }}
+        />
+
+        <div
+          className="relative z-10 flex flex-col items-center justify-center px-6 text-center"
+          style={{ minHeight: 'calc(100vh - 56px - 80px)' }}
+        >
+          <span className="mb-5 inline-flex items-center gap-2 rounded-[5px] border border-[#e2e8f0] bg-white px-3 py-1.5 text-[10px] font-semibold tracking-[0.18em] text-[#64748b] shadow-sm">
+            <span className="size-1.5 rounded-full bg-accent" />
+            ONLY 36 STATES AVAILABLE
+          </span>
+
+          <h1 className="font-display max-w-xl text-[40px] leading-[1.07] tracking-tight text-[#0f172a] md:text-[54px]">
+            We help you find<br />verified hospitals<br />
+            <span className="mt-1 inline-block rounded-[5px] bg-accent px-3 py-1 text-black">
+              anywhere in Nigeria.
+            </span>
+          </h1>
+
+          <p className="mt-5 max-w-sm text-[14px] leading-relaxed text-[#64748b]">
+            Search 2,000+ hospitals across all 36 states — filter by specialty, proximity, or ownership type. Free and open to everyone.
+          </p>
+
+          <form onSubmit={handleSearch} className="mt-7 w-full max-w-[440px]">
+            <div className="relative">
+              <button
+                type="submit"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-[#94a3b8] transition hover:text-[#0f172a]"
+              >
+                <Search className="size-4" strokeWidth={2} />
+              </button>
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Hospital name, city or LGA…"
+                className="w-full rounded-[5px] border border-[#e2e8f0] bg-white py-3 pl-9 pr-4 text-[13px] text-[#0f172a] shadow-sm outline-none placeholder:text-[#94a3b8] transition focus:border-accent"
+              />
+            </div>
+          </form>
+
+          <div className="mt-3 flex flex-wrap justify-center gap-1.5">
+            {['Cardiology', 'Maternity', 'Emergency', 'Pediatrics'].map((s) => (
+              <button
+                key={s}
+                onClick={() => navigate(`/search?specialty=${encodeURIComponent(s)}`)}
+                className="rounded-[5px] border border-[#e2e8f0] bg-white px-3 py-1 text-[11px] text-[#64748b] shadow-sm transition hover:border-accent hover:text-accent"
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="relative z-10 border-t border-[#e2e8f0] bg-white/80 backdrop-blur-sm">
+          <div className="mx-auto grid max-w-5xl grid-cols-2 divide-x divide-[#e2e8f0] sm:grid-cols-4">
             {STATS.map((stat) => (
-              <div key={stat.label} className="px-6 py-2 first:pl-0 last:pr-0">
-                <p className="font-display text-[28px] font-black text-[#0f172a]">
-                  {stat.value}
-                </p>
-                <p className="mt-0.5 text-[12px] font-semibold text-[#64748b]">{stat.label}</p>
+              <div key={stat.label} className="px-6 py-5 text-center">
+                <p className="font-display text-[22px] font-black text-[#0f172a]">{stat.value}</p>
+                <p className="mt-0.5 text-[11px] font-medium text-[#94a3b8]">{stat.label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* HOW IT WORKS — warm charcoal off-black sampled from panel image */}
       <section id="about" className="scroll-mt-6 border-b border-[#2a2620] bg-[#1c1a17]">
         <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
           <p className="font-display text-[10px] tracking-[0.2em] text-accent">
@@ -327,7 +229,6 @@ export function HomePage() {
             THREE STEPS TO THE RIGHT CARE.
           </h2>
 
-          {/* Road SVG — desktop */}
           <div className="relative mt-12 hidden md:block" style={{ height: '380px' }}>
             <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1200 380" preserveAspectRatio="xMidYMid meet">
               <path d="M 0,110 L 140,110 C 230,110 280,185 330,235 C 390,295 440,305 540,305 L 660,305 C 760,305 810,235 860,185 C 910,140 960,110 1060,110 L 1200,110"
@@ -336,9 +237,9 @@ export function HomePage() {
                 fill="none" stroke="#222" strokeWidth="30" strokeLinecap="round" strokeLinejoin="round" />
               <path d="M 0,110 L 140,110 C 230,110 280,185 330,235 C 390,295 440,305 540,305 L 660,305 C 760,305 810,235 860,185 C 910,140 960,110 1060,110 L 1200,110"
                 fill="none" stroke="#00e5d4" strokeWidth="1.5" strokeLinecap="round" strokeDasharray="18 14" />
-              <circle cx="200" cy="110" r="20" fill="#00e5d4" /><circle cx="200" cy="110" r="9" fill="#0a0a0a" />
-              <circle cx="600" cy="305" r="20" fill="#00e5d4" /><circle cx="600" cy="305" r="9" fill="#0a0a0a" />
-              <circle cx="1000" cy="110" r="20" fill="#00e5d4" /><circle cx="1000" cy="110" r="9" fill="#0a0a0a" />
+              <circle cx="200" cy="110" r="20" fill="#00e5d4" /><circle cx="200" cy="110" r="9" fill="#1c1c1c" />
+              <circle cx="600" cy="305" r="20" fill="#00e5d4" /><circle cx="600" cy="305" r="9" fill="#1c1c1c" />
+              <circle cx="1000" cy="110" r="20" fill="#00e5d4" /><circle cx="1000" cy="110" r="9" fill="#1c1c1c" />
             </svg>
             <div className="absolute" style={{ left: '8%', top: 0, maxWidth: '190px' }}>
               <p className="font-display text-[9px] tracking-widest text-accent">STEP 01</p>
@@ -357,7 +258,6 @@ export function HomePage() {
             </div>
           </div>
 
-          {/* Mobile steps */}
           <div className="mt-10 flex flex-col gap-0 md:hidden">
             {STEPS.map((step, i, arr) => (
               <div key={step.num} className="flex gap-5">
@@ -377,54 +277,76 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* SPECIALTIES */}
-      <section
-        className="relative overflow-hidden border-b border-[#e2e8f0]"
-        style={{
-          backgroundImage: "url('/assets/ink-bg.png')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundColor: '#ffffff',
-        }}
-      >
-        <div className="absolute inset-0 bg-white/30" />
-        <div className="relative z-10 mx-auto max-w-6xl px-6 pb-10 pt-16 md:pt-20">
-          <p className="font-display text-[10px] tracking-[0.2em] text-accent">
-            BROWSE BY SPECIALTY
-          </p>
-          <h2 className="mt-3 font-display text-[24px] leading-tight text-[#0f172a] md:text-[30px]">
-            FIND EXACTLY WHAT YOU NEED.
-          </h2>
-        </div>
+      <section className="relative min-h-[560px] overflow-hidden border-b border-[#e2e8f0] bg-[#f8f9fb]">
 
-        <div className="relative z-10 flex flex-col gap-3 pb-14">
-          <div className="flex gap-3" style={{ animation: 'marquee-left 28s linear infinite', width: 'max-content' }}>
-            {[...SPECIALTIES, ...SPECIALTIES].map((s, i) => (
-              <div
-                key={i}
-                className="flex shrink-0 items-center gap-2 rounded-[5px] border border-[#e2e8f0] bg-white px-5 py-3 text-[13px] font-medium text-[#64748b]"
-              >
-                <span className="size-1.5 shrink-0 rounded-full bg-accent" />
-                {s}
-              </div>
-            ))}
-          </div>
+        <div className="mx-auto max-w-6xl px-6 py-16 md:py-24">
+          <div className="max-w-[300px]">
+            <p className="font-display text-[10px] tracking-[0.2em] text-accent">
+              BROWSE BY SPECIALTY
+            </p>
+            <h2 className="mt-3 font-display text-[28px] leading-[1.1] text-[#0f172a] md:text-[36px]">
+              FIND EXACTLY<br />WHAT YOU<br />NEED.
+            </h2>
+            <p className="mt-5 text-[14px] leading-relaxed text-[#64748b]">
+              From routine checkups to specialist care — search by the exact treatment you need.
+            </p>
 
-          <div className="flex gap-3" style={{ animation: 'marquee-right 22s linear infinite', width: 'max-content' }}>
-            {[...SPECIALTIES, ...SPECIALTIES].map((s, i) => (
-              <div
-                key={i}
-                className="flex shrink-0 items-center gap-2 rounded-[5px] border border-[#e2e8f0] bg-white/90 px-5 py-3 text-[13px] font-medium text-[#64748b]"
-              >
-                <span className="size-1.5 shrink-0 rounded-full bg-[#cbd5e1]" />
-                {s}
-              </div>
-            ))}
+            <div className="mt-6 flex flex-wrap gap-2 lg:hidden">
+              {SPECIALTIES.map((s) => (
+                <button
+                  key={s}
+                  onClick={() => navigate(`/search?specialty=${encodeURIComponent(s)}`)}
+                  className="rounded-full border border-[#dde3ec] bg-white px-4 py-2 text-[12px] text-[#64748b] transition hover:border-accent hover:text-accent"
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
+
+        <div className="absolute right-0 top-0 hidden lg:block" style={{ width: 560, height: 560 }}>
+          <svg width="560" height="560" style={{ position: 'absolute', inset: 0 }}>
+            <circle cx="280" cy="280" r="100" pathLength="100" fill="none" stroke="#94a3b8" strokeWidth="1.5" strokeDasharray="2 3" />
+            <circle cx="280" cy="280" r="185" pathLength="100" fill="none" stroke="#94a3b8" strokeWidth="1.5" strokeDasharray="2 3" />
+            <circle cx="280" cy="280" r="290" pathLength="100" fill="none" stroke="#94a3b8" strokeWidth="1.5" strokeDasharray="2 3" />
+            <circle cx="280" cy="280" r="410" pathLength="100" fill="none" stroke="#94a3b8" strokeWidth="1"   strokeDasharray="2 3" />
+            <circle cx="280" cy="280" r="7" fill="#00e5d4" />
+            <circle cx="280" cy="280" r="3" fill="white" />
+            <circle cx="380" cy="280" r="4"   fill="#00e5d4" />
+            <circle cx="280" cy="180" r="4"   fill="#00e5d4" />
+            <circle cx="440" cy="187" r="3.5" fill="#00e5d4" />
+            <circle cx="95"  cy="280" r="3"   fill="#94a3b8" />
+            <circle cx="280" cy="465" r="3"   fill="#94a3b8" />
+          </svg>
+
+          {SPECIALTY_BUBBLES.map((b) => (
+            <div
+              key={b.name}
+              className={`absolute flex items-center justify-center rounded-full text-center font-medium leading-tight ${
+                b.variant === 'accent'
+                  ? 'bg-accent text-black shadow-lg shadow-accent/20'
+                  : b.variant === 'dark'
+                  ? 'bg-[#1c1c1c] text-white shadow-md'
+                  : 'border-2 border-[#b8c5d6] bg-white text-[#0f172a] shadow-sm'
+              }`}
+              style={{
+                width: b.size,
+                height: b.size,
+                top: b.cy,
+                left: b.cx,
+                transform: 'translate(-50%, -50%)',
+                fontSize: b.size >= 100 ? 12 : 11,
+                padding: 12,
+              }}
+            >
+              {b.name}
+            </div>
+          ))}
+        </div>
+
       </section>
 
-      {/* FEATURES */}
       <section className="border-b border-[#2a2620] bg-[#1c1a18]">
         <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
           <p className="font-display text-[10px] tracking-[0.2em] text-accent">
@@ -452,7 +374,6 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* CTA BANNER — kept aqua as requested */}
       <section className="bg-accent">
         <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
