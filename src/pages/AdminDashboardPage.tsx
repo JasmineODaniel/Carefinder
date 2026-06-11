@@ -1,12 +1,15 @@
 import { useState } from 'react';
-import { Plus, Pencil, Trash2, Eye, EyeOff, Star, UserPlus } from 'lucide-react';
+import { Plus, Pencil, Trash2, Eye, EyeOff, UserPlus } from 'lucide-react';
 import { PageLayout } from '../components/layout/PageLayout';
 import { Button } from '../components/ui/Button';
+import { Input } from '../components/ui/Input';
 import { Spinner } from '../components/ui/Spinner';
 import { HospitalForm } from '../features/admin/HospitalForm';
+import { RatingWidget } from '../features/reviews/RatingWidget';
 import { useAdminHospitals } from '../features/admin/useAdminHospitals';
 import { useAdminReviews } from '../features/reviews/useAdminReviews';
 import { supabase } from '../lib/supabase';
+import { isValidEmail } from '../lib/utils';
 import type { Hospital } from '../types/hospital';
 
 type Tab = 'hospitals' | 'reviews' | 'invite';
@@ -65,7 +68,7 @@ export function AdminDashboardPage() {
               key={key}
               onClick={() => setTab(key)}
               className={`rounded-[5px] px-4 py-1.5 text-[13px] font-medium transition-colors ${
-                tab === key ? 'bg-accent text-black' : 'text-soft hover:text-ink'
+                tab === key ? 'bg-accent text-on-accent' : 'text-soft hover:text-ink'
               }`}
             >
               {label}
@@ -157,14 +160,10 @@ export function AdminDashboardPage() {
                             {r.hospitals?.name ?? '—'}
                           </td>
                           <td className="px-4 py-3">
-                            <div className="flex gap-0.5" aria-label={`${r.rating} stars`}>
-                              {Array.from({ length: 5 }).map((_, i) => (
-                                <Star key={i} className={`size-3.5 ${i < r.rating ? 'fill-accent text-accent' : 'text-line'}`} strokeWidth={1.5} />
-                              ))}
-                            </div>
+                            <RatingWidget rating={r.rating} size="sm" />
                           </td>
                           <td className="hidden px-4 py-3 text-[13px] text-soft md:table-cell max-w-[260px]">
-                            <span className="line-clamp-2">{r.text ?? <em className="text-[#aaa]">No text</em>}</span>
+                            <span className="line-clamp-2">{r.text ?? <em className="text-soft">No text</em>}</span>
                           </td>
                           <td className="hidden px-4 py-3 text-[12px] text-soft sm:table-cell whitespace-nowrap">
                             {new Date(r.created_at).toLocaleDateString('en-NG', { year: 'numeric', month: 'short', day: 'numeric' })}
@@ -227,7 +226,7 @@ function InviteAdminPanel() {
 
   async function handleInvite(e: React.SyntheticEvent) {
     e.preventDefault();
-    if (!email.trim() || !email.includes('@')) {
+    if (!isValidEmail(email)) {
       setErrorMsg('Enter a valid email address.');
       return;
     }
@@ -248,7 +247,7 @@ function InviteAdminPanel() {
       <div className="rounded-[5px] border border-line bg-surface p-6">
         <div className="mb-5 flex items-center gap-3">
           <span className="grid size-9 place-items-center rounded-[5px] bg-accent">
-            <UserPlus className="size-4 text-black" strokeWidth={2} />
+            <UserPlus className="size-4 text-on-accent" strokeWidth={2} />
           </span>
           <div>
             <p className="text-[14px] font-semibold text-ink">Invite a new admin</p>
@@ -262,28 +261,19 @@ function InviteAdminPanel() {
           </div>
         ) : (
           <form onSubmit={handleInvite} className="flex flex-col gap-3">
-            <div>
-              <label htmlFor="invite-email" className="mb-1.5 block text-[12px] font-medium text-ink">
-                Email address
-              </label>
-              <input
-                id="invite-email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="newadmin@example.com"
-                className="w-full rounded-[5px] border border-line bg-canvas px-3 py-2.5 text-[13px] text-ink placeholder:text-soft focus:border-accent focus:outline-none"
-              />
-              {errorMsg && <p className="mt-1.5 text-[12px] text-error">{errorMsg}</p>}
-            </div>
-            <button
-              type="submit"
-              disabled={status === 'sending'}
-              className="flex items-center gap-2 self-start rounded-[5px] bg-accent px-4 py-2.5 text-[13px] font-semibold text-black transition hover:bg-accent-hover disabled:opacity-60"
-            >
+            <Input
+              id="invite-email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="newadmin@example.com"
+              label="Email address"
+              error={errorMsg}
+            />
+            <Button type="submit" disabled={status === 'sending'} className="self-start">
               <UserPlus className="size-4" strokeWidth={2} />
               {status === 'sending' ? 'Sending…' : 'Send invite'}
-            </button>
+            </Button>
           </form>
         )}
       </div>
