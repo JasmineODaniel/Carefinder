@@ -1,4 +1,3 @@
-import { HeartPulse } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../features/auth/AuthContext';
 
@@ -11,9 +10,7 @@ export function Header() {
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3.5">
 
         <Link to="/" className="flex shrink-0 items-center gap-2.5">
-          <span className="relative grid size-8 place-items-center rounded-[5px] bg-accent">
-            <HeartPulse className="size-4 text-black" strokeWidth={2.5} />
-          </span>
+          <img src="/favicon.svg" alt="Carefinder logo" className="size-8 rounded-[5px]" />
           <span className="font-display text-[13px] tracking-tight text-white">
             CARE<span className="text-accent">FINDER</span>
           </span>

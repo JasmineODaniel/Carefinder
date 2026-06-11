@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 const GRID_IMAGES = [
   'https://images.unsplash.com/photo-1551190822-a9333d879b1f?auto=format&w=280&q=80',
@@ -31,9 +31,7 @@ export function LoginPage() {
       <div className="flex w-full flex-col justify-between p-10 md:w-[420px] lg:w-[480px]">
 
         <div className="flex items-center gap-2.5">
-          <span className="grid size-7 place-items-center rounded-full bg-accent">
-            <Plus className="size-4 text-black" strokeWidth={2.5} />
-          </span>
+          <img src="/favicon.svg" alt="Carefinder logo" className="size-7 rounded-[5px]" />
           <span className="font-display text-[13px] tracking-tight text-white">
             Carefinder°
           </span>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Plus, Lock } from 'lucide-react';
+import { Lock } from 'lucide-react';
 import { useAuth } from '../features/auth/AuthContext';
 
 const TAGS = ['Admin', 'Secure', 'Verified'];
@@ -32,9 +32,7 @@ export function AdminLoginPage() {
         <div className="relative flex w-full flex-col bg-surface lg:w-[44%] lg:min-h-screen">
           <div className="flex items-center justify-between px-7 py-5">
             <Link to="/" className="flex items-center gap-2">
-              <span className="grid size-7 place-items-center rounded-[5px] bg-ink text-surface">
-                <Plus className="size-4" strokeWidth={2.5} />
-              </span>
+              <img src="/favicon.svg" alt="Carefinder logo" className="size-7 rounded-[5px]" />
               <span className="font-display text-[14px] tracking-tight text-ink">CAREFINDER</span>
             </Link>
             <Link
