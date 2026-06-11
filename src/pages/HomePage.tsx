@@ -167,10 +167,9 @@ export function HomePage() {
           </span>
 
           <h1 className="font-display max-w-xl text-[40px] leading-[1.07] tracking-tight text-[#0f172a] md:text-[54px]">
-            We help you find<br />verified hospitals<br />
-            <span className="mt-1 inline-block rounded-[5px] bg-accent px-3 py-1 text-black">
-              anywhere in Nigeria.
-            </span>
+            We help you <span className="inline-block rounded-[5px] bg-accent px-3 py-1 text-black">find</span><br />
+            verified <span className="inline-block rounded-[5px] bg-accent px-3 py-1 text-black">hospitals</span><br />
+            anywhere in Nigeria.
           </h1>
 
           <p className="mt-5 max-w-sm text-[14px] leading-relaxed text-[#64748b]">
