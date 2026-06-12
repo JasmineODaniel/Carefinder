@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Download } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { Modal } from '../../components/ui/Modal';
 import { Button } from '../../components/ui/Button';
 import { ALL_COLUMNS, COLUMN_LABELS, exportHospitals, type ExportColumn } from './useExport';
@@ -54,11 +55,11 @@ export function ExportModal({ open, onClose, hospitals, query }: ExportModalProp
       </div>
 
       <div className="flex justify-end gap-3">
-        <Button variant="secondary" onClick={onClose}>
+        <Button type="button" variant="secondary" onClick={onClose}>
           Cancel
         </Button>
-        <Button onClick={handleExport} disabled={selected.length === 0}>
-          <Download className="size-4" strokeWidth={2} />
+        <Button type="button" onClick={handleExport} disabled={selected.length === 0}>
+          <FontAwesomeIcon icon={faDownload} className="text-[13px]" />
           Export CSV
         </Button>
       </div>

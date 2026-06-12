@@ -1,5 +1,8 @@
 import { useState } from 'react';
-import { Plus, Pencil, Trash2, Eye, EyeOff, Star, UserPlus } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faPlus, faPencil, faTrash, faEye, faEyeSlash, faStar, faUserPlus,
+} from '@fortawesome/free-solid-svg-icons';
 import { PageLayout } from '../components/layout/PageLayout';
 import { Button } from '../components/ui/Button';
 import { Spinner } from '../components/ui/Spinner';
@@ -49,13 +52,13 @@ export function AdminDashboardPage() {
           </div>
           {tab === 'hospitals' && (
             <Button onClick={openNewForm}>
-              <Plus className="size-4" strokeWidth={2.5} />
+              <FontAwesomeIcon icon={faPlus} />
               Add hospital
             </Button>
           )}
         </div>
 
-        <div className="mb-6 flex gap-1 rounded-[5px] border border-line bg-canvas p-1 w-fit">
+        <div className="mb-6 flex w-fit gap-1 rounded-[5px] border border-line bg-canvas p-1">
           {([
             { key: 'hospitals', label: `Hospitals (${hospitals.length})` },
             { key: 'reviews', label: `Reviews (${reviews.length})` },
@@ -63,6 +66,7 @@ export function AdminDashboardPage() {
           ] as { key: Tab; label: string }[]).map(({ key, label }) => (
             <button
               key={key}
+              type="button"
               onClick={() => setTab(key)}
               className={`rounded-[5px] px-4 py-1.5 text-[13px] font-medium transition-colors ${
                 tab === key ? 'bg-accent text-black' : 'text-soft hover:text-ink'
@@ -100,13 +104,21 @@ export function AdminDashboardPage() {
                         <td className="hidden px-4 py-3 text-[13px] capitalize text-soft md:table-cell">{h.ownership}</td>
                         <td className="px-4 py-3 text-right">
                           <div className="flex items-center justify-end gap-2">
-                            <button onClick={() => openEditForm(h)} aria-label={`Edit ${h.name}`}
-                              className="rounded-[5px] p-1.5 text-soft transition-colors hover:bg-muted hover:text-ink">
-                              <Pencil className="size-4" strokeWidth={2} />
+                            <button
+                              type="button"
+                              onClick={() => openEditForm(h)}
+                              aria-label={`Edit ${h.name}`}
+                              className="rounded-[5px] p-1.5 text-soft transition-colors hover:bg-muted hover:text-ink"
+                            >
+                              <FontAwesomeIcon icon={faPencil} className="text-[13px]" />
                             </button>
-                            <button onClick={() => handleDeleteHospital(h.id)} aria-label={`Delete ${h.name}`}
-                              className="rounded-[5px] p-1.5 text-soft transition-colors hover:bg-error-bg hover:text-error">
-                              <Trash2 className="size-4" strokeWidth={2} />
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteHospital(h.id)}
+                              aria-label={`Delete ${h.name}`}
+                              className="rounded-[5px] p-1.5 text-soft transition-colors hover:bg-error-bg hover:text-error"
+                            >
+                              <FontAwesomeIcon icon={faTrash} className="text-[13px]" />
                             </button>
                           </div>
                         </td>
@@ -159,14 +171,18 @@ export function AdminDashboardPage() {
                           <td className="px-4 py-3">
                             <div className="flex gap-0.5" aria-label={`${r.rating} stars`}>
                               {Array.from({ length: 5 }).map((_, i) => (
-                                <Star key={i} className={`size-3.5 ${i < r.rating ? 'fill-accent text-accent' : 'text-line'}`} strokeWidth={1.5} />
+                                <FontAwesomeIcon
+                                  key={i}
+                                  icon={faStar}
+                                  className={`text-[13px] ${i < r.rating ? 'text-accent' : 'text-line'}`}
+                                />
                               ))}
                             </div>
                           </td>
-                          <td className="hidden px-4 py-3 text-[13px] text-soft md:table-cell max-w-[260px]">
-                            <span className="line-clamp-2">{r.text ?? <em className="text-[#aaa]">No text</em>}</span>
+                          <td className="hidden max-w-[260px] px-4 py-3 text-[13px] text-soft md:table-cell">
+                            <span className="line-clamp-2">{r.text ?? <em className="text-dim">No text</em>}</span>
                           </td>
-                          <td className="hidden px-4 py-3 text-[12px] text-soft sm:table-cell whitespace-nowrap">
+                          <td className="hidden whitespace-nowrap px-4 py-3 text-[12px] text-soft sm:table-cell">
                             {new Date(r.created_at).toLocaleDateString('en-NG', { year: 'numeric', month: 'short', day: 'numeric' })}
                           </td>
                           <td className="px-4 py-3">
@@ -177,18 +193,20 @@ export function AdminDashboardPage() {
                           <td className="px-4 py-3 text-right">
                             <div className="flex items-center justify-end gap-2">
                               <button
+                                type="button"
                                 onClick={() => toggleHidden(r.id, !r.hidden)}
                                 aria-label={r.hidden ? 'Show review' : 'Hide review'}
                                 className="rounded-[5px] p-1.5 text-soft transition-colors hover:bg-muted hover:text-ink"
                               >
-                                {r.hidden ? <Eye className="size-4" strokeWidth={2} /> : <EyeOff className="size-4" strokeWidth={2} />}
+                                <FontAwesomeIcon icon={r.hidden ? faEye : faEyeSlash} className="text-[13px]" />
                               </button>
                               <button
+                                type="button"
                                 onClick={() => handleDeleteReview(r.id)}
                                 aria-label="Delete review"
                                 className="rounded-[5px] p-1.5 text-soft transition-colors hover:bg-error-bg hover:text-error"
                               >
-                                <Trash2 className="size-4" strokeWidth={2} />
+                                <FontAwesomeIcon icon={faTrash} className="text-[13px]" />
                               </button>
                             </div>
                           </td>
@@ -248,7 +266,7 @@ function InviteAdminPanel() {
       <div className="rounded-[5px] border border-line bg-surface p-6">
         <div className="mb-5 flex items-center gap-3">
           <span className="grid size-9 place-items-center rounded-[5px] bg-accent">
-            <UserPlus className="size-4 text-black" strokeWidth={2} />
+            <FontAwesomeIcon icon={faUserPlus} className="text-[14px] text-black" />
           </span>
           <div>
             <p className="text-[14px] font-semibold text-ink">Invite a new admin</p>
@@ -261,7 +279,7 @@ function InviteAdminPanel() {
             Invite sent successfully. The recipient will receive an email from Supabase Auth.
           </div>
         ) : (
-          <form onSubmit={handleInvite} className="flex flex-col gap-3">
+          <form onSubmit={handleInvite} className="flex flex-col gap-3" noValidate>
             <div>
               <label htmlFor="invite-email" className="mb-1.5 block text-[12px] font-medium text-ink">
                 Email address
@@ -272,16 +290,22 @@ function InviteAdminPanel() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="newadmin@example.com"
+                aria-invalid={!!errorMsg}
+                aria-describedby={errorMsg ? 'invite-error' : undefined}
                 className="w-full rounded-[5px] border border-line bg-canvas px-3 py-2.5 text-[13px] text-ink placeholder:text-soft focus:border-accent focus:outline-none"
               />
-              {errorMsg && <p className="mt-1.5 text-[12px] text-error">{errorMsg}</p>}
+              {errorMsg && (
+                <p id="invite-error" role="alert" className="mt-1.5 text-[12px] text-error">
+                  {errorMsg}
+                </p>
+              )}
             </div>
             <button
               type="submit"
               disabled={status === 'sending'}
               className="flex items-center gap-2 self-start rounded-[5px] bg-accent px-4 py-2.5 text-[13px] font-semibold text-black transition hover:bg-accent-hover disabled:opacity-60"
             >
-              <UserPlus className="size-4" strokeWidth={2} />
+              <FontAwesomeIcon icon={faUserPlus} />
               {status === 'sending' ? 'Sending…' : 'Send invite'}
             </button>
           </form>

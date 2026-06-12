@@ -1,4 +1,5 @@
-import { Star } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { Spinner } from '../../components/ui/Spinner';
 import type { Review } from './useReviews';
 
@@ -33,14 +34,14 @@ export function ReviewList({ reviews, loading, error }: ReviewListProps) {
         Reviews ({reviews.length})
       </h3>
       {reviews.map((review) => (
-        <article key={review.id} className="rounded-card border border-line bg-surface p-5">
+        <article key={review.id} className="rounded-[5px] border border-line bg-surface p-5">
           <div className="mb-2 flex items-center gap-2">
             <div className="flex gap-0.5" aria-label={`${review.rating} out of 5 stars`}>
               {Array.from({ length: 5 }).map((_, i) => (
-                <Star
+                <FontAwesomeIcon
                   key={i}
-                  className={`size-4 ${i < review.rating ? 'fill-accent text-accent' : 'text-line'}`}
-                  strokeWidth={1.5}
+                  icon={faStar}
+                  className={`text-[16px] ${i < review.rating ? 'text-accent' : 'text-line'}`}
                 />
               ))}
             </div>
