@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 const GRID_IMAGES = [
   'https://images.unsplash.com/photo-1551190822-a9333d879b1f?auto=format&w=280&q=80',
@@ -26,7 +27,7 @@ export function LoginPage() {
   const [email, setEmail] = useState('');
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-[#1c1c1c]">
+    <div className="flex h-screen w-full overflow-hidden bg-panel">
 
       <div className="flex w-full flex-col justify-between p-10 md:w-[420px] lg:w-[480px]">
 
@@ -45,55 +46,58 @@ export function LoginPage() {
             <h1 className="mt-3 font-display text-[32px] leading-[1.1] text-white">
               Welcome back.
             </h1>
-            <p className="mt-2 text-[14px] leading-relaxed text-[#666]">
+            <p className="mt-2 text-[14px] leading-relaxed text-soft">
               Find verified hospitals across all 36 states — no account required.
             </p>
           </div>
 
           <div className="flex flex-col gap-3">
             <div className="flex flex-col gap-1.5">
-              <label className="text-[11px] font-medium tracking-widest text-[#555]">
+              <label htmlFor="login-email" className="text-[11px] font-medium tracking-widest text-dim">
                 EMAIL (OPTIONAL)
               </label>
               <input
+                id="login-email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full rounded-[5px] border border-[#222] bg-[#111] px-4 py-3 text-[14px] text-white placeholder-[#444] outline-none transition focus:border-accent"
+                className="w-full rounded-[5px] border border-panel-border bg-black px-4 py-3 text-[14px] text-white placeholder:text-dim/50 outline-none transition focus:border-accent"
               />
             </div>
 
             <button
+              type="button"
               onClick={() => navigate('/')}
-              className="flex w-full items-center justify-between rounded-[5px] bg-accent px-5 py-3.5 text-[13px] font-semibold text-on-accent transition hover:bg-accent-hover"
+              className="flex w-full items-center justify-between rounded-[5px] bg-accent px-5 py-3.5 text-[13px] font-semibold text-black transition hover:bg-accent-hover"
             >
               <span>Enter Carefinder</span>
-              <ArrowRight className="size-4" strokeWidth={2.5} />
+              <FontAwesomeIcon icon={faArrowRight} />
             </button>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="h-px flex-1 bg-[#222]" />
-            <span className="text-[11px] text-[#444]">or</span>
-            <div className="h-px flex-1 bg-[#222]" />
+            <div className="h-px flex-1 bg-panel-border" />
+            <span className="text-[11px] text-dim/50">or</span>
+            <div className="h-px flex-1 bg-panel-border" />
           </div>
 
           <button
+            type="button"
             onClick={() => navigate('/')}
-            className="w-full rounded-[5px] border border-[#222] bg-transparent px-5 py-3 text-[13px] font-medium text-[#888] transition hover:border-[#444] hover:text-white"
+            className="w-full rounded-[5px] border border-panel-border bg-transparent px-5 py-3 text-[13px] font-medium text-dim transition hover:border-soft hover:text-white"
           >
-            Continue as guest →
+            Continue as guest
           </button>
 
-          <p className="text-[11px] text-[#333]">
+          <p className="text-[11px] text-dim/40">
             Free for everyone in Nigeria. No data sold. No spam.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <span className="font-display text-[24px] font-bold text-white">2,000+</span>
-          <span className="text-[12px] text-[#555]">hospitals indexed across all 36 states</span>
+          <span className="text-[12px] text-soft">hospitals indexed across all 36 states</span>
         </div>
       </div>
 
@@ -127,8 +131,8 @@ export function LoginPage() {
               key={pill.label}
               className={`rounded-[5px] px-3 py-1.5 text-[11px] font-semibold ${
                 pill.accent
-                  ? 'bg-accent text-on-accent'
-                  : 'border border-white/20 bg-black/75 text-white'
+                  ? 'bg-accent text-black'
+                  : 'border border-panel-border bg-black/75 text-white'
               }`}
             >
               {pill.label}

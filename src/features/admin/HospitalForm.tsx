@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Upload, X, Image as ImageIcon } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUpload, faXmark, faImage } from '@fortawesome/free-solid-svg-icons';
 import { z } from 'zod';
 import MDEditor from '@uiw/react-md-editor';
 import '@uiw/react-md-editor/markdown-editor.css';
@@ -292,12 +293,12 @@ export function HospitalForm({ open, onClose, hospital, onSaved }: HospitalFormP
                   aria-label="Remove photo"
                   className="absolute -right-2 -top-2 grid size-5 place-items-center rounded-full border border-line bg-surface text-soft hover:text-error"
                 >
-                  <X className="size-3" strokeWidth={2.5} />
+                  <FontAwesomeIcon icon={faXmark} className="text-[10px]" />
                 </button>
               </div>
             ) : (
               <div className="grid h-20 w-28 shrink-0 place-items-center rounded-[5px] border border-dashed border-line bg-muted">
-                <ImageIcon className="size-6 text-soft" strokeWidth={1.5} />
+                <FontAwesomeIcon icon={faImage} className="text-[20px] text-soft" />
               </div>
             )}
 
@@ -306,7 +307,7 @@ export function HospitalForm({ open, onClose, hospital, onSaved }: HospitalFormP
                 htmlFor="photo-upload"
                 className={`flex cursor-pointer items-center gap-2 self-start rounded-[5px] border border-line bg-surface px-3 py-2 text-[13px] font-medium text-ink transition-colors hover:bg-muted ${uploadingPhoto ? 'pointer-events-none opacity-60' : ''}`}
               >
-                <Upload className="size-4" strokeWidth={2} />
+                <FontAwesomeIcon icon={faUpload} className="text-[13px]" />
                 {uploadingPhoto ? 'Uploading…' : photoUrl ? 'Replace photo' : 'Upload photo'}
                 <input
                   id="photo-upload"

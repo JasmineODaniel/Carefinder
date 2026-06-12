@@ -1,5 +1,6 @@
 import { useEffect, type ReactNode } from 'react';
-import { X } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 interface ModalProps {
   open: boolean;
@@ -39,11 +40,12 @@ export function Modal({ open, onClose, title, children, maxWidth = 'max-w-lg' }:
             {title}
           </h2>
           <button
+            type="button"
             onClick={onClose}
             aria-label="Close modal"
             className="grid size-8 place-items-center rounded-[5px] text-soft transition-colors hover:bg-muted hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
-            <X className="size-4" strokeWidth={2} />
+            <FontAwesomeIcon icon={faXmark} className="text-[14px]" />
           </button>
         </div>
         {children}

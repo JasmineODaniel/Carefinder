@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Star } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '../../components/ui/Button';
 import { useAuth } from '../auth/AuthContext';
 
@@ -76,11 +77,11 @@ export function ReviewForm({ onSubmit }: ReviewFormProps) {
                 onMouseLeave={() => setHovered(0)}
                 className="rounded-[5px] p-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
-                <Star
-                  className={`size-7 transition-colors ${
-                    value <= (hovered || rating) ? 'fill-accent text-accent' : 'text-line'
+                <FontAwesomeIcon
+                  icon={faStar}
+                  className={`text-[28px] transition-colors ${
+                    value <= (hovered || rating) ? 'text-accent' : 'text-line'
                   }`}
-                  strokeWidth={1.5}
                 />
               </button>
             );

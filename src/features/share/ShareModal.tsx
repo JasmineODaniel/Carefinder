@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Check, Copy, Mail } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faCopy, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { useSearchParams } from 'react-router-dom';
 import { Modal } from '../../components/ui/Modal';
 import { Button } from '../../components/ui/Button';
@@ -66,15 +67,15 @@ export function ShareModal({ open, onClose, hospitals }: ShareModalProps) {
               className="min-w-0 flex-1 rounded-[5px] border border-line bg-muted px-3 py-2 text-[13px] text-soft"
             />
             <button
+              type="button"
               onClick={handleCopy}
               aria-label={copied ? 'Copied' : 'Copy link'}
               className="flex items-center gap-1.5 rounded-[5px] border border-line bg-surface px-3 py-2 text-[13px] font-medium text-ink transition-colors hover:bg-muted"
             >
-              {copied ? (
-                <Check className="size-4 text-green-600" strokeWidth={2} />
-              ) : (
-                <Copy className="size-4" strokeWidth={2} />
-              )}
+              <FontAwesomeIcon
+                icon={copied ? faCheck : faCopy}
+                className={`text-[13px] ${copied ? 'text-green-600' : ''}`}
+              />
               {copied ? 'Copied!' : 'Copy'}
             </button>
           </div>
@@ -98,7 +99,7 @@ export function ShareModal({ open, onClose, hospitals }: ShareModalProps) {
                 error={emailError}
               />
               <Button type="submit" disabled={sending} className="self-start">
-                <Mail className="size-4" strokeWidth={2} />
+                <FontAwesomeIcon icon={faEnvelope} className="text-[13px]" />
                 {sending ? 'Sending…' : `Send ${hospitals.length} hospitals`}
               </Button>
             </form>
