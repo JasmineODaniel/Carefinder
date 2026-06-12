@@ -69,7 +69,7 @@ export function LoginPage() {
             <button
               type="button"
               onClick={() => navigate('/')}
-              className="flex w-full items-center justify-between rounded-[5px] bg-accent px-5 py-3.5 text-[13px] font-semibold text-black transition hover:bg-accent-hover"
+              className="flex w-full items-center justify-between rounded-[5px] bg-accent px-5 py-3.5 text-[13px] font-semibold text-on-accent transition hover:bg-accent-hover"
             >
               <span>Enter Carefinder</span>
               <FontAwesomeIcon icon={faArrowRight} />

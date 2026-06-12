@@ -21,7 +21,7 @@ export function Header() {
             <>
               <button
                 onClick={() => navigate('/admin')}
-                className="rounded-[5px] bg-accent px-4 py-2 text-[12px] font-semibold text-black transition hover:bg-accent-hover"
+                className="rounded-[5px] bg-accent px-4 py-2 text-[12px] font-semibold text-on-accent transition hover:bg-accent-hover"
               >
                 Dashboard
               </button>

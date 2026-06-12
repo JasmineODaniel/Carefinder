@@ -159,7 +159,7 @@ export function SearchPage() {
                     onClick={() => setViewMode(mode)}
                     aria-label={`${label} view`}
                     className={`rounded-[5px] px-3 py-2 text-[12px] font-medium transition-colors ${
-                      viewMode === mode ? 'bg-accent text-white' : 'text-soft hover:text-ink'
+                      viewMode === mode ? 'bg-accent text-on-accent' : 'text-soft hover:text-ink'
                     }`}
                   >
                     {label}
@@ -175,7 +175,7 @@ export function SearchPage() {
               </button>
               <button
                 onClick={() => setShowShare(true)}
-                className="rounded-[5px] bg-accent px-3 py-2 text-[13px] font-medium text-white transition-colors hover:bg-accent-hover"
+                className="rounded-[5px] bg-accent px-3 py-2 text-[13px] font-medium text-on-accent transition-colors hover:bg-accent-hover"
               >
                 Share
               </button>

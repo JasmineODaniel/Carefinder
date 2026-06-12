@@ -7,6 +7,7 @@ import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { useShareLink } from './useShareLink';
 import { supabase } from '../../lib/supabase';
+import { isValidEmail } from '../../lib/utils';
 import type { Hospital } from '../../types/hospital';
 
 interface ShareModalProps {
@@ -34,7 +35,7 @@ export function ShareModal({ open, onClose, hospitals }: ShareModalProps) {
 
   async function handleEmailShare(e: React.SyntheticEvent) {
     e.preventDefault();
-    if (!email.trim() || !email.includes('@')) {
+    if (!isValidEmail(email)) {
       setEmailError('Enter a valid email address.');
       return;
     }

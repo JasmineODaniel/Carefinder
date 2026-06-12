@@ -5,11 +5,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { PageLayout } from '../components/layout/PageLayout';
 import { Button } from '../components/ui/Button';
+import { Input } from '../components/ui/Input';
 import { Spinner } from '../components/ui/Spinner';
 import { HospitalForm } from '../features/admin/HospitalForm';
+import { RatingWidget } from '../features/reviews/RatingWidget';
 import { useAdminHospitals } from '../features/admin/useAdminHospitals';
 import { useAdminReviews } from '../features/reviews/useAdminReviews';
 import { supabase } from '../lib/supabase';
+import { isValidEmail } from '../lib/utils';
 import type { Hospital } from '../types/hospital';
 
 type Tab = 'hospitals' | 'reviews' | 'invite';
@@ -69,7 +72,7 @@ export function AdminDashboardPage() {
               type="button"
               onClick={() => setTab(key)}
               className={`rounded-[5px] px-4 py-1.5 text-[13px] font-medium transition-colors ${
-                tab === key ? 'bg-accent text-black' : 'text-soft hover:text-ink'
+                tab === key ? 'bg-accent text-on-accent' : 'text-soft hover:text-ink'
               }`}
             >
               {label}
@@ -245,7 +248,7 @@ function InviteAdminPanel() {
 
   async function handleInvite(e: React.SyntheticEvent) {
     e.preventDefault();
-    if (!email.trim() || !email.includes('@')) {
+    if (!isValidEmail(email)) {
       setErrorMsg('Enter a valid email address.');
       return;
     }
@@ -307,7 +310,7 @@ function InviteAdminPanel() {
             >
               <FontAwesomeIcon icon={faUserPlus} />
               {status === 'sending' ? 'Sending…' : 'Send invite'}
-            </button>
+            </Button>
           </form>
         )}
       </div>

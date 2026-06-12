@@ -16,7 +16,7 @@ export default function NotFound() {
       <button
         type="button"
         onClick={() => navigate('/')}
-        className="rounded-[5px] bg-accent px-5 py-2.5 text-[13px] font-semibold text-black transition hover:bg-accent-hover"
+        className="rounded-[5px] bg-accent px-5 py-2.5 text-[13px] font-semibold text-on-accent transition hover:bg-accent-hover"
       >
         Back to home
       </button>
