@@ -310,7 +310,7 @@ function InviteAdminPanel() {
             >
               <FontAwesomeIcon icon={faUserPlus} />
               {status === 'sending' ? 'Sending…' : 'Send invite'}
-            </Button>
+            </button>
           </form>
         )}
       </div>

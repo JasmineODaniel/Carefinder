@@ -17,6 +17,7 @@ const hospital: Hospital = {
   description: null,
   lat: 6.4,
   lng: 3.4,
+  photo_url: null,
 };
 
 describe('HospitalCard', () => {
@@ -39,7 +40,7 @@ describe('HospitalCard', () => {
   it('calls onSelect when clicked', () => {
     const onSelect = vi.fn();
     render(<HospitalCard hospital={hospital} onSelect={onSelect} />);
-    fireEvent.click(screen.getByRole('article'));
+    fireEvent.click(screen.getByLabelText('Eko Hospital'));
     expect(onSelect).toHaveBeenCalledWith(hospital);
   });
 

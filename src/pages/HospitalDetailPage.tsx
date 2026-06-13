@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { MapPin, Phone, Mail, Clock, ChevronLeft } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLocationDot, faPhone, faEnvelope, faClock } from '@fortawesome/free-solid-svg-icons';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 import { PageLayout } from '../components/layout/PageLayout';
@@ -53,6 +54,7 @@ export function HospitalDetailPage() {
         <div className="mx-auto max-w-4xl px-6 py-12">
           <p className="text-[14px] text-error">Hospital not found.</p>
           <button
+            type="button"
             onClick={() => navigate(-1)}
             className="mt-4 rounded-[5px] text-[14px] font-medium text-accent hover:underline"
           >
@@ -71,10 +73,10 @@ export function HospitalDetailPage() {
     <PageLayout>
       <div className="mx-auto max-w-4xl px-6 py-8">
         <button
+          type="button"
           onClick={() => navigate(-1)}
-          className="mb-6 flex items-center gap-1.5 rounded-[5px] text-[14px] font-medium text-soft transition-colors hover:text-ink"
+          className="mb-6 rounded-[5px] text-[14px] font-medium text-soft transition-colors hover:text-ink"
         >
-          <ChevronLeft className="size-4" strokeWidth={2} />
           Back to results
         </button>
 
@@ -83,7 +85,7 @@ export function HospitalDetailPage() {
             <div>
               <h1 className="font-display text-[24px] text-ink">{hospital.name.toUpperCase()}</h1>
               <p className="mt-1 flex items-center gap-1.5 text-[14px] text-soft">
-                <MapPin className="size-4" strokeWidth={2} />
+                <FontAwesomeIcon icon={faLocationDot} className="text-[13px]" />
                 {[hospital.address, hospital.lga, hospital.city].filter(Boolean).join(', ')}
               </p>
             </div>
@@ -106,7 +108,7 @@ export function HospitalDetailPage() {
                 href={`tel:${hospital.phone}`}
                 className="flex items-center gap-2 text-[14px] text-soft transition-colors hover:text-accent"
               >
-                <Phone className="size-4" strokeWidth={2} />
+                <FontAwesomeIcon icon={faPhone} className="text-[13px]" />
                 {hospital.phone}
               </a>
             )}
@@ -115,13 +117,13 @@ export function HospitalDetailPage() {
                 href={`mailto:${hospital.email}`}
                 className="flex items-center gap-2 text-[14px] text-soft transition-colors hover:text-accent"
               >
-                <Mail className="size-4" strokeWidth={2} />
+                <FontAwesomeIcon icon={faEnvelope} className="text-[13px]" />
                 {hospital.email}
               </a>
             )}
             {hospital.visiting_hours && (
               <div className="flex items-start gap-2 text-[14px] text-soft">
-                <Clock className="mt-0.5 size-4 shrink-0" strokeWidth={2} />
+                <FontAwesomeIcon icon={faClock} className="mt-0.5 text-[13px] shrink-0" />
                 <span>{hospital.visiting_hours}</span>
               </div>
             )}
