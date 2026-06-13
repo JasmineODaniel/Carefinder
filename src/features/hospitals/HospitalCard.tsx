@@ -86,7 +86,7 @@ export function HospitalCard({ hospital, rating, reviewCount, distanceKm, onSele
     ? `${rating.toFixed(1)} ★${reviewCount ? ` (${reviewCount})` : ''}`
     : 'No reviews yet';
 
-  const cardClass = 'group flex cursor-pointer flex-col rounded-[5px] border border-line bg-surface transition-all duration-200 hover:border-accent hover:shadow-[0_8px_32px_-8px_rgba(0,229,212,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent';
+  const cardClass = 'group flex cursor-pointer flex-col rounded-[5px] border border-line bg-surface transition-all duration-200 hover:border-accent hover:shadow-[0_8px_32px_-8px_color-mix(in_srgb,var(--color-accent)_18%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent';
 
   if (compact) {
     return (
