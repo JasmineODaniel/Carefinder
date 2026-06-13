@@ -91,7 +91,7 @@ export function HospitalCard({ hospital, rating, reviewCount, distanceKm, onSele
   if (compact) {
     return (
       <article
-        role="article"
+        role="button"
         tabIndex={0}
         aria-label={name}
         onClick={() => onSelect?.(hospital)}

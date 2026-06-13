@@ -1,6 +1,16 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { MapPin, Search } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faLocationDot,
+  faMagnifyingGlass,
+  faTableColumns,
+  faList,
+  faDownload,
+  faShareNodes,
+  faChevronLeft,
+  faChevronRight,
+} from '@fortawesome/free-solid-svg-icons';
 import { PageLayout } from '../components/layout/PageLayout';
 import { HospitalCard } from '../features/hospitals/HospitalCard';
 import { FilterBar } from '../features/hospitals/FilterBar';
@@ -12,6 +22,8 @@ import { useNearbyHospitals, type HospitalWithDistance } from '../features/hospi
 
 type Ownership = 'all' | 'public' | 'private';
 type ViewMode = 'list' | 'map' | 'split';
+
+const PAGE_SIZE = 12;
 
 export function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -34,6 +46,7 @@ export function SearchPage() {
   );
   const [showExport, setShowExport] = useState(false);
   const [showShare, setShowShare] = useState(false);
+  const [page, setPage] = useState(1);
 
   const { hospitals, loading: hospitalsLoading, error: hospitalsError } = useHospitals();
   const usingRadius = nearMe && !!coords;
@@ -62,6 +75,13 @@ export function SearchPage() {
     });
   }, [base, query, ownership, selectedSpecialties]);
 
+  const totalPages = Math.ceil(results.length / PAGE_SIZE);
+  const pageResults = results.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  useEffect(() => {
+    setPage(1);
+  }, [query, ownership, selectedSpecialties, nearMe, radiusKm]);
+
   useEffect(() => {
     const params: Record<string, string | string[]> = {};
     if (query) params.q = query;
@@ -76,9 +96,7 @@ export function SearchPage() {
     query.trim() !== '' || ownership !== 'all' || selectedSpecialties.length > 0 || nearMe;
 
   function toggleSpecialty(s: string) {
-    setSelectedSpecialties((prev) =>
-      prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s],
-    );
+    setSelectedSpecialties((prev) => (prev.includes(s) ? [] : [s]));
   }
 
   function toggleNearMe() {
@@ -125,59 +143,68 @@ export function SearchPage() {
       <div className="border-b border-line bg-surface px-6 py-4">
         <div className="mx-auto max-w-6xl">
           <div className="flex items-center gap-3">
-            <div className="flex flex-1 items-center gap-2 rounded-[5px] border border-line bg-canvas px-3 py-2.5 transition-colors focus-within:border-accent">
-              <MapPin className="size-4 shrink-0 text-soft" strokeWidth={2} />
+            <div className="flex w-full max-w-[260px] items-center gap-2 rounded-[5px] border border-line bg-canvas px-3 py-2.5 transition-colors focus-within:border-accent">
+              <FontAwesomeIcon icon={faLocationDot} className="shrink-0 text-[14px] text-soft" />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search by hospital, city, or LGA"
+                placeholder="Search hospital name"
                 aria-label="Search hospitals"
-                className="min-w-0 flex-1 bg-transparent text-[14px] text-ink placeholder:text-soft focus:outline-none"
+                className="min-w-0 flex-1 bg-transparent text-[13px] text-ink placeholder:text-soft focus:outline-none"
               />
               {query && (
                 <button
+                  type="button"
                   onClick={() => setQuery('')}
                   className="rounded-[5px] px-1.5 py-0.5 text-[11px] text-soft transition-colors hover:bg-muted hover:text-ink"
                 >
                   Clear
                 </button>
               )}
-              <Search className="size-4 shrink-0 text-soft" strokeWidth={2} />
+              <FontAwesomeIcon icon={faMagnifyingGlass} className="shrink-0 text-[13px] text-soft" />
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-1 items-center justify-end gap-2">
               <div className="hidden items-center rounded-[5px] border border-line bg-canvas sm:inline-flex">
                 {(
                   [
-                    { mode: 'split' as ViewMode, label: 'Split' },
-                    { mode: 'list' as ViewMode, label: 'List' },
-                    { mode: 'map' as ViewMode, label: 'Map' },
+                    { mode: 'split' as ViewMode, icon: faTableColumns, label: 'Split view' },
+                    { mode: 'list' as ViewMode, icon: faList, label: 'List view' },
+                    { mode: 'map' as ViewMode, icon: faLocationDot, label: 'Map view' },
                   ] as const
-                ).map(({ mode, label }) => (
+                ).map(({ mode, icon, label }) => (
                   <button
                     key={mode}
+                    type="button"
                     onClick={() => setViewMode(mode)}
-                    aria-label={`${label} view`}
-                    className={`rounded-[5px] px-3 py-2 text-[12px] font-medium transition-colors ${
-                      viewMode === mode ? 'bg-accent text-on-accent' : 'text-soft hover:text-ink'
+                    title={label}
+                    aria-label={label}
+                    className={`rounded-[5px] px-3 py-2.5 text-[13px] transition-colors ${
+                      viewMode === mode ? 'bg-accent text-white' : 'text-soft hover:text-ink'
                     }`}
                   >
-                    {label}
+                    <FontAwesomeIcon icon={icon} />
                   </button>
                 ))}
               </div>
 
               <button
+                type="button"
                 onClick={() => setShowExport(true)}
-                className="rounded-[5px] border border-line bg-canvas px-3 py-2 text-[13px] font-medium text-ink transition-colors hover:bg-muted"
+                title="Export CSV"
+                aria-label="Export CSV"
+                className="rounded-[5px] border border-line bg-canvas px-3 py-2.5 text-[13px] text-ink transition-colors hover:bg-muted"
               >
-                Export CSV
+                <FontAwesomeIcon icon={faDownload} />
               </button>
               <button
+                type="button"
                 onClick={() => setShowShare(true)}
-                className="rounded-[5px] bg-accent px-3 py-2 text-[13px] font-medium text-on-accent transition-colors hover:bg-accent-hover"
+                title="Share"
+                aria-label="Share"
+                className="rounded-[5px] bg-accent px-3 py-2.5 text-[13px] text-white transition-colors hover:bg-accent-hover"
               >
-                Share
+                <FontAwesomeIcon icon={faShareNodes} />
               </button>
             </div>
           </div>
@@ -241,22 +268,73 @@ export function SearchPage() {
                     <p className="mt-1 text-[13px] text-soft">Try widening your filters or radius.</p>
                   </div>
                 ) : (
-                  <div
-                    className={`grid grid-cols-1 gap-3 ${
-                      viewMode === 'split' ? '' : 'sm:grid-cols-2 lg:grid-cols-3'
-                    }`}
-                  >
-                    {results.map((h) => (
-                      <HospitalCard
-                        key={h.id}
-                        hospital={h}
-                        distanceKm={
-                          usingRadius ? (h as HospitalWithDistance).distance_km : undefined
-                        }
-                        onSelect={(hospital) => navigate(`/hospitals/${hospital.id}`)}
-                      />
-                    ))}
-                  </div>
+                  <>
+                    <div
+                      className={`grid grid-cols-1 gap-3 ${
+                        viewMode === 'split' ? '' : 'sm:grid-cols-2 lg:grid-cols-3'
+                      }`}
+                    >
+                      {pageResults.map((h) => (
+                        <HospitalCard
+                          key={h.id}
+                          hospital={h}
+                          distanceKm={
+                            usingRadius ? (h as HospitalWithDistance).distance_km : undefined
+                          }
+                          onSelect={(hospital) => navigate(`/hospitals/${hospital.id}`)}
+                          compact={viewMode === 'split'}
+                        />
+                      ))}
+                    </div>
+
+                    {totalPages > 1 && (
+                      <div className="mt-6 flex items-center justify-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => setPage((p) => Math.max(1, p - 1))}
+                          disabled={page === 1}
+                          className="rounded-[5px] border border-line px-3 py-2 text-[12px] text-soft transition-colors hover:border-accent hover:text-accent disabled:opacity-30"
+                        >
+                          <FontAwesomeIcon icon={faChevronLeft} />
+                        </button>
+
+                        {Array.from({ length: totalPages }, (_, i) => i + 1)
+                          .filter((p) => p === 1 || p === totalPages || Math.abs(p - page) <= 1)
+                          .reduce<(number | 'ellipsis')[]>((acc, p, idx, arr) => {
+                            if (idx > 0 && p - (arr[idx - 1] as number) > 1) acc.push('ellipsis');
+                            acc.push(p);
+                            return acc;
+                          }, [])
+                          .map((p, idx) =>
+                            p === 'ellipsis' ? (
+                              <span key={`ellipsis-${idx}`} className="px-1 text-[12px] text-soft">…</span>
+                            ) : (
+                              <button
+                                key={p}
+                                type="button"
+                                onClick={() => setPage(p as number)}
+                                className={`rounded-[5px] px-3 py-2 text-[12px] font-medium transition-colors ${
+                                  page === p
+                                    ? 'bg-accent text-white'
+                                    : 'border border-line text-soft hover:border-accent hover:text-accent'
+                                }`}
+                              >
+                                {p}
+                              </button>
+                            ),
+                          )}
+
+                        <button
+                          type="button"
+                          onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                          disabled={page === totalPages}
+                          className="rounded-[5px] border border-line px-3 py-2 text-[12px] text-soft transition-colors hover:border-accent hover:text-accent disabled:opacity-30"
+                        >
+                          <FontAwesomeIcon icon={faChevronRight} />
+                        </button>
+                      </div>
+                    )}
+                  </>
                 )}
               </>
             )}
