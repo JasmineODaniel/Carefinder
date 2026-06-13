@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { MapPin, Search } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLocationDot, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { PageLayout } from '../components/layout/PageLayout';
 import { HospitalCard } from '../features/hospitals/HospitalCard';
 import { FilterBar } from '../features/hospitals/FilterBar';
@@ -126,7 +127,7 @@ export function SearchPage() {
         <div className="mx-auto max-w-6xl">
           <div className="flex items-center gap-3">
             <div className="flex flex-1 items-center gap-2 rounded-[5px] border border-line bg-canvas px-3 py-2.5 transition-colors focus-within:border-accent">
-              <MapPin className="size-4 shrink-0 text-soft" strokeWidth={2} />
+              <FontAwesomeIcon icon={faLocationDot} className="size-4 shrink-0 text-soft" />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -142,7 +143,7 @@ export function SearchPage() {
                   Clear
                 </button>
               )}
-              <Search className="size-4 shrink-0 text-soft" strokeWidth={2} />
+              <FontAwesomeIcon icon={faMagnifyingGlass} className="size-4 shrink-0 text-soft" />
             </div>
 
             <div className="flex items-center gap-2">

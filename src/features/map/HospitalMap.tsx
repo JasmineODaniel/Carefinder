@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { Map as MapIcon } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMap } from '@fortawesome/free-solid-svg-icons';
 import type { Hospital } from '../../types/hospital';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN ?? '';
@@ -89,7 +90,7 @@ export function HospitalMap({ hospitals, center, onSelect }: HospitalMapProps) {
     return (
       <div className="flex h-[480px] w-full flex-col items-center justify-center gap-3 rounded-[5px] border border-dashed border-line bg-muted">
         <span className="grid size-10 place-items-center rounded-[5px] bg-surface text-soft shadow-sm">
-          <MapIcon className="size-5" strokeWidth={1.5} />
+          <FontAwesomeIcon icon={faMap} className="size-5" />
         </span>
         <div className="text-center">
           <p className="font-display text-[13px] text-ink">MAP UNAVAILABLE</p>
