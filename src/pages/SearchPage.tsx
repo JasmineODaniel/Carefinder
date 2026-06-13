@@ -47,6 +47,9 @@ export function SearchPage() {
   const [showExport, setShowExport] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const [page, setPage] = useState(1);
+  const [hasSearched, setHasSearched] = useState(
+    searchParams.getAll('specialty').length > 0 || !!searchParams.get('q') || !!searchParams.get('ownership'),
+  );
 
   const { hospitals, loading: hospitalsLoading, error: hospitalsError } = useHospitals();
   const usingRadius = nearMe && !!coords;
@@ -79,6 +82,24 @@ export function SearchPage() {
   const pageResults = results.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   useEffect(() => {
+    const urlQuery = searchParams.get('q') ?? '';
+    const urlOwnership = (searchParams.get('ownership') as Ownership) ?? 'all';
+    const urlSpecialties = searchParams.getAll('specialty');
+    setQuery(urlQuery);
+    setOwnership(urlOwnership);
+    setSelectedSpecialties(urlSpecialties);
+    if (urlQuery || urlOwnership !== 'all' || urlSpecialties.length > 0) {
+      setHasSearched(true);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (query || ownership !== 'all' || selectedSpecialties.length > 0 || nearMe) {
+      setHasSearched(true);
+    }
+  }, [query, ownership, selectedSpecialties, nearMe]);
+
+  useEffect(() => {
     setPage(1);
   }, [query, ownership, selectedSpecialties, nearMe, radiusKm]);
 
@@ -97,6 +118,7 @@ export function SearchPage() {
 
   function toggleSpecialty(s: string) {
     setSelectedSpecialties((prev) => (prev.includes(s) ? [] : [s]));
+    setHasSearched(true);
   }
 
   function toggleNearMe() {
@@ -133,6 +155,7 @@ export function SearchPage() {
     setOwnership('all');
     setSelectedSpecialties([]);
     setNearMe(false);
+    setHasSearched(false);
   }
 
   const showMap = viewMode === 'map' || viewMode === 'split';
@@ -236,6 +259,13 @@ export function SearchPage() {
       >
         {showList && (
           <div>
+            {!hasSearched ? (
+              <div className="rounded-[5px] border border-dashed border-line p-12 text-center">
+                <p className="font-display text-[14px] text-ink">SEARCH FOR HOSPITALS</p>
+                <p className="mt-1 text-[13px] text-soft">Type a name, city, or LGA above — or apply a filter to see results.</p>
+              </div>
+            ) : (
+            <>
             <p className="mb-4 text-[12px] text-soft">
               {loading ? (
                 'Loading…'
@@ -337,6 +367,8 @@ export function SearchPage() {
                   </>
                 )}
               </>
+            )}
+            </>
             )}
           </div>
         )}
