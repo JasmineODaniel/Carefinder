@@ -50,8 +50,8 @@ export function HospitalMap({ hospitals, center, onSelect }: HospitalMapProps) {
 
       const el = document.createElement('div');
       el.style.cssText =
-        'width:30px;height:30px;border-radius:5px;background:var(--color-panel);border:2px solid var(--color-accent);box-shadow:0 2px 10px var(--color-accent);cursor:pointer;display:flex;align-items:center;justify-content:center;';
-      el.innerHTML = '<img src="/favicon.svg" style="width:20px;height:20px;border-radius:3px;" alt="" />';
+        'width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 2px 8px var(--color-accent));';
+      el.innerHTML = '<img src="/favicon.svg" style="width:32px;height:32px;" alt="" />';
       el.setAttribute('aria-label', h.name);
       el.setAttribute('role', 'button');
       el.setAttribute('tabindex', '0');
