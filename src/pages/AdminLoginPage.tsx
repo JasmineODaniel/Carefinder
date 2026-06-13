@@ -1,16 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Eye, EyeOff } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../features/auth/AuthContext';
+
+const SLIDES = [
+  {
+    headline: (<>Manage Nigeria's<br /><span className="text-accent">Hospital Directory.</span></>),
+    body: 'Add records, review submissions, and keep the directory accurate for everyone across all 36 states.',
+  },
+  {
+    headline: (<>Admin access<br /><span className="text-accent">only.</span></>),
+    body: 'Only verified administrators can sign in. All actions are logged and protected by Supabase RLS.',
+  },
+];
 
 export function AdminLoginPage() {
   const navigate = useNavigate();
   const { signIn } = useAuth();
+  const [slide, setSlide] = useState(0);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const t = setInterval(() => setSlide((s) => (s + 1) % SLIDES.length), 4000);
+    return () => clearInterval(t);
+  }, []);
 
   async function handleSubmit(e: { preventDefault(): void }) {
     e.preventDefault();
@@ -28,33 +46,47 @@ export function AdminLoginPage() {
   return (
     <div className="flex h-screen w-screen overflow-hidden font-body">
 
-      <div className="relative hidden flex-col items-center justify-between bg-[#1c1c1c] p-8 lg:flex lg:w-[45%]">
+      <div className="relative hidden flex-col items-center justify-between bg-panel p-8 lg:flex lg:w-[45%]">
         <div className="flex w-full items-center gap-2">
           <img src="/favicon.svg" alt="Carefinder logo" className="size-7 rounded-[5px]" />
           <span className="font-display text-[13px] tracking-tight text-white">CAREFINDER</span>
         </div>
 
-        <div className="flex flex-col items-center text-center">
-          <div className="mb-8 flex size-[88px] items-center justify-center rounded-[20px] bg-white/10 shadow-lg shadow-black/30">
-            <img src="/favicon.svg" alt="" className="size-14 rounded-[12px]" />
-          </div>
-          <h2 className="font-display text-[28px] leading-[1.2] text-white">
-            Manage Nigeria's<br />
-            <span className="text-accent">Hospital Directory.</span>
-          </h2>
-          <p className="mt-4 max-w-[280px] text-[13px] leading-relaxed text-white/45">
-            Add records, review submissions, and keep the directory accurate for everyone across all 36 states.
-          </p>
+        <div className="relative w-full flex-1">
+          {SLIDES.map((s, i) => (
+            <div
+              key={i}
+              className="absolute inset-0 flex flex-col items-center justify-center text-center transition-opacity duration-700"
+              style={{ opacity: slide === i ? 1 : 0, pointerEvents: slide === i ? 'auto' : 'none' }}
+            >
+              <div className="mb-8 flex size-[88px] items-center justify-center rounded-[20px] bg-white/10 shadow-lg shadow-black/30">
+                <img src="/favicon.svg" alt="" className="size-14 rounded-[12px]" />
+              </div>
+              <h2 className="font-display text-[28px] leading-[1.2] text-white">
+                {s.headline}
+              </h2>
+              <p className="mt-4 max-w-[280px] text-[13px] leading-relaxed text-white/45">
+                {s.body}
+              </p>
+            </div>
+          ))}
         </div>
 
         <div className="flex gap-2">
-          <span className="size-2 rounded-full bg-white" />
-          <span className="size-2 rounded-full bg-white/20" />
-          <span className="size-2 rounded-full bg-white/20" />
+          {SLIDES.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              aria-label={`Go to slide ${i + 1}`}
+              onClick={() => setSlide(i)}
+              className="h-2 rounded-full bg-white transition-all duration-500"
+              style={{ width: slide === i ? 24 : 8, opacity: slide === i ? 1 : 0.2 }}
+            />
+          ))}
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col bg-white">
+      <div className="flex flex-1 flex-col bg-surface">
         <div className="flex items-center justify-between px-8 py-6">
           <Link to="/" className="flex items-center gap-2 lg:hidden">
             <img src="/favicon.svg" alt="Carefinder logo" className="size-6 rounded-[5px]" />
@@ -62,7 +94,7 @@ export function AdminLoginPage() {
           </Link>
           <div className="hidden lg:block" />
           <Link to="/" className="text-[13px] text-soft transition-colors hover:text-ink">
-            Back to site →
+            Back to site
           </Link>
         </div>
 
@@ -75,7 +107,7 @@ export function AdminLoginPage() {
               Please enter your details to sign in to your account
             </p>
 
-            <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
+            <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4" noValidate>
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="email" className="text-[12px] font-medium text-ink">
                   Email
@@ -87,7 +119,9 @@ export function AdminLoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@example.com"
                   required
-                  className="w-full rounded-[5px] border border-line px-4 py-3 text-[14px] text-ink placeholder:text-soft outline-none transition focus:border-ink"
+                  aria-invalid={error ? true : undefined}
+                  aria-describedby={error ? 'login-error' : undefined}
+                  className="w-full rounded-[5px] border border-line px-4 py-3 text-[14px] text-ink placeholder:text-dim outline-none transition focus:border-ink"
                 />
               </div>
 
@@ -103,20 +137,23 @@ export function AdminLoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="minimum 8 characters"
                     required
-                    className="w-full rounded-[5px] border border-line px-4 py-3 pr-11 text-[14px] text-ink placeholder:text-soft outline-none transition focus:border-ink"
+                    aria-invalid={error ? true : undefined}
+                    aria-describedby={error ? 'login-error' : undefined}
+                    className="w-full rounded-[5px] border border-line px-4 py-3 pr-11 text-[14px] text-ink placeholder:text-dim outline-none transition focus:border-ink"
                   />
                   <button
                     type="button"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
                     onClick={() => setShowPassword((v) => !v)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-soft transition-colors hover:text-ink"
                   >
-                    {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} className="text-[14px]" />
                   </button>
                 </div>
               </div>
 
               {error && (
-                <p role="alert" className="text-[13px] text-error">
+                <p id="login-error" role="alert" className="text-[13px] text-error">
                   {error}
                 </p>
               )}
@@ -126,7 +163,7 @@ export function AdminLoginPage() {
                 disabled={loading}
                 className="mt-1 w-full rounded-[5px] bg-accent py-3.5 text-[14px] font-semibold text-black transition hover:bg-accent-hover disabled:opacity-50"
               >
-                {loading ? 'Signing in…' : 'Sign In →'}
+                {loading ? 'Signing in…' : 'Sign In'}
               </button>
             </form>
 

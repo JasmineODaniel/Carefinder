@@ -1,4 +1,5 @@
-import { Star } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 interface RatingWidgetProps {
   rating: number | null;
@@ -16,7 +17,7 @@ export function RatingWidget({ rating, count, size = 'md' }: RatingWidgetProps) 
   }
 
   const stars = Math.round(rating);
-  const iconSize = size === 'sm' ? 'size-4' : 'size-5';
+  const iconClass = size === 'sm' ? 'text-[16px]' : 'text-[20px]';
 
   return (
     <div className="flex items-center gap-2">
@@ -25,10 +26,10 @@ export function RatingWidget({ rating, count, size = 'md' }: RatingWidgetProps) 
         aria-label={`${rating.toFixed(1)} out of 5 stars`}
       >
         {Array.from({ length: 5 }).map((_, i) => (
-          <Star
+          <FontAwesomeIcon
             key={i}
-            className={`${iconSize} ${i < stars ? 'fill-accent text-accent' : 'text-line'}`}
-            strokeWidth={1.5}
+            icon={faStar}
+            className={`${iconClass} ${i < stars ? 'text-accent' : 'text-line'}`}
           />
         ))}
       </div>

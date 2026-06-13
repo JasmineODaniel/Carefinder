@@ -6,7 +6,7 @@ export function Header() {
   const navigate = useNavigate();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[#1a1a1a] bg-[#1c1c1c]">
+    <header className="sticky top-0 z-40 border-b border-panel-border bg-panel">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3.5">
 
         <Link to="/" className="flex shrink-0 items-center gap-2.5">
@@ -16,18 +16,29 @@ export function Header() {
           </span>
         </Link>
 
+        <nav className="hidden items-center gap-6 sm:flex">
+          <Link to="/" className="text-[13px] text-dim transition-colors hover:text-white">
+            Home
+          </Link>
+          <Link to="/search" className="text-[13px] text-dim transition-colors hover:text-white">
+            Find Hospitals
+          </Link>
+        </nav>
+
         <div className="flex shrink-0 items-center gap-2">
           {user ? (
             <>
               <button
+                type="button"
                 onClick={() => navigate('/admin')}
-                className="rounded-[5px] bg-accent px-4 py-2 text-[12px] font-semibold text-on-accent transition hover:bg-accent-hover"
+                className="rounded-[5px] bg-accent px-4 py-2 text-[12px] font-semibold text-black transition hover:bg-accent-hover"
               >
                 Dashboard
               </button>
               <button
+                type="button"
                 onClick={signOut}
-                className="rounded-[5px] border border-[#222] px-3 py-2 text-[12px] font-medium text-[#666] transition hover:border-[#444] hover:text-white"
+                className="rounded-[5px] border border-panel-border px-3 py-2 text-[12px] font-medium text-dim transition hover:border-line hover:text-white"
               >
                 Sign out
               </button>

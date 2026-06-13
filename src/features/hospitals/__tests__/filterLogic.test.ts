@@ -33,6 +33,7 @@ const hospitals: Hospital[] = [
     description: null,
     lat: 6.4,
     lng: 3.4,
+    photo_url: null,
   },
   {
     id: '2',
@@ -48,6 +49,7 @@ const hospitals: Hospital[] = [
     description: null,
     lat: 9.0,
     lng: 7.5,
+    photo_url: null,
   },
 ];
 

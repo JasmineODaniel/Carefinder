@@ -34,7 +34,7 @@ export function PageLayout({ children }: { children: ReactNode }) {
       <main className="flex-1">{children}</main>
 
       <footer className="bg-canvas px-4 pb-4 pt-6">
-        <div className="overflow-hidden rounded-[12px] bg-[#1c1c1c]">
+        <div className="overflow-hidden rounded-[12px] bg-panel">
 
           <div className="px-8 pt-10">
             <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
