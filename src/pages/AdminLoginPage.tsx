@@ -161,18 +161,12 @@ export function AdminLoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="mt-1 w-full rounded-[5px] bg-accent py-3.5 text-[14px] font-semibold text-black transition hover:bg-accent-hover disabled:opacity-50"
+                className="mt-1 w-full rounded-[5px] bg-accent py-3.5 text-[14px] font-semibold text-white transition hover:bg-accent-hover disabled:opacity-50"
               >
                 {loading ? 'Signing in…' : 'Sign In'}
               </button>
             </form>
 
-            <p className="mt-5 text-center text-[13px] text-soft">
-              Forgot password?{' '}
-              <a href="mailto:admin@carefinder.ng" className="text-ink underline hover:no-underline">
-                Contact support
-              </a>
-            </p>
           </div>
         </div>
 

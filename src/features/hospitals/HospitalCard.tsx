@@ -138,7 +138,7 @@ export function HospitalCard({ hospital, rating, reviewCount, distanceKm, onSele
               {distanceKm.toFixed(1)} km
             </span>
           ) : <span />}
-          <span className="text-[11px] font-medium text-soft transition-colors group-hover:text-accent">
+          <span className="rounded-[5px] bg-accent px-3 py-1 text-[12px] font-semibold text-white">
             View
           </span>
         </div>
@@ -196,7 +196,7 @@ export function HospitalCard({ hospital, rating, reviewCount, distanceKm, onSele
             {distanceKm.toFixed(1)} km
           </span>
         ) : <span />}
-        <span className="text-[12px] font-medium text-soft transition-colors group-hover:text-accent">
+        <span className="rounded-[5px] bg-accent px-3 py-1.5 text-[13px] font-semibold text-white">
           View Details
         </span>
       </div>
