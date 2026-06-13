@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { Map as MapIcon } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMap } from '@fortawesome/free-solid-svg-icons';
 import type { Hospital } from '../../types/hospital';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN ?? '';
@@ -49,8 +50,8 @@ export function HospitalMap({ hospitals, center, onSelect }: HospitalMapProps) {
 
       const el = document.createElement('div');
       el.style.cssText =
-        'width:30px;height:30px;border-radius:5px;background:var(--color-accent);border:2px solid rgba(255,255,255,0.15);box-shadow:0 2px 10px rgba(0,229,212,0.4);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--color-on-accent);font-size:13px;font-weight:700;';
-      el.textContent = '+';
+        'width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 2px 8px var(--color-accent));';
+      el.innerHTML = '<img src="/favicon.svg" style="width:32px;height:32px;" alt="" />';
       el.setAttribute('aria-label', h.name);
       el.setAttribute('role', 'button');
       el.setAttribute('tabindex', '0');
@@ -89,7 +90,7 @@ export function HospitalMap({ hospitals, center, onSelect }: HospitalMapProps) {
     return (
       <div className="flex h-[480px] w-full flex-col items-center justify-center gap-3 rounded-[5px] border border-dashed border-line bg-muted">
         <span className="grid size-10 place-items-center rounded-[5px] bg-surface text-soft shadow-sm">
-          <MapIcon className="size-5" strokeWidth={1.5} />
+          <FontAwesomeIcon icon={faMap} className="text-[18px]" />
         </span>
         <div className="text-center">
           <p className="font-display text-[13px] text-ink">MAP UNAVAILABLE</p>

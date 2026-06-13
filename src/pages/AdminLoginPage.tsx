@@ -59,8 +59,18 @@ export function AdminLoginPage() {
               className="absolute inset-0 flex flex-col items-center justify-center text-center transition-opacity duration-700"
               style={{ opacity: slide === i ? 1 : 0, pointerEvents: slide === i ? 'auto' : 'none' }}
             >
-              <div className="mb-8 flex size-[88px] items-center justify-center rounded-[20px] bg-white/10 shadow-lg shadow-black/30">
-                <img src="/favicon.svg" alt="" className="size-14 rounded-[12px]" />
+              <div className="mb-8 relative flex items-center justify-center">
+                <svg width="96" height="96" viewBox="0 0 96 96" aria-hidden="true">
+                  <path
+                    d="M48,84 C48,84 8,60 8,36 C8,22 18,12 30,12 C39,12 45,17 48,23 C51,17 57,12 66,12 C78,12 88,22 88,36 C88,60 48,84 48,84 Z"
+                    style={{ fill: 'color-mix(in srgb,var(--color-accent) 18%,transparent)', stroke: 'color-mix(in srgb,var(--color-accent) 50%,transparent)', strokeWidth: 1.5 }}
+                  />
+                  <path
+                    d="M48,68 C48,68 24,54 24,40 C24,32 30,27 36,27 C41,27 45,30 48,34 C51,30 55,27 60,27 C66,27 72,32 72,40 C72,54 48,68 48,68 Z"
+                    style={{ fill: 'none', stroke: 'color-mix(in srgb,var(--color-accent) 30%,transparent)', strokeWidth: 1 }}
+                  />
+                </svg>
+                <img src="/favicon.svg" alt="" className="absolute size-12" />
               </div>
               <h2 className="font-display text-[28px] leading-[1.2] text-white">
                 {s.headline}
@@ -161,18 +171,12 @@ export function AdminLoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="mt-1 w-full rounded-[5px] bg-accent py-3.5 text-[14px] font-semibold text-black transition hover:bg-accent-hover disabled:opacity-50"
+                className="mt-1 w-full rounded-[5px] bg-accent py-3.5 text-[14px] font-semibold text-white transition hover:bg-accent-hover disabled:opacity-50"
               >
                 {loading ? 'Signing in…' : 'Sign In'}
               </button>
             </form>
 
-            <p className="mt-5 text-center text-[13px] text-soft">
-              Forgot password?{' '}
-              <a href="mailto:admin@carefinder.ng" className="text-ink underline hover:no-underline">
-                Contact support
-              </a>
-            </p>
           </div>
         </div>
 

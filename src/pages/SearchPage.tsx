@@ -92,6 +92,31 @@ export function SearchPage() {
   const totalPages = Math.ceil(results.length / PAGE_SIZE);
   const paginated = results.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
+  const totalPages = Math.ceil(results.length / PAGE_SIZE);
+  const pageResults = results.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  useEffect(() => {
+    const urlQuery = searchParams.get('q') ?? '';
+    const urlOwnership = (searchParams.get('ownership') as Ownership) ?? 'all';
+    const urlSpecialties = searchParams.getAll('specialty');
+    setQuery(urlQuery);
+    setOwnership(urlOwnership);
+    setSelectedSpecialties(urlSpecialties);
+    if (urlQuery || urlOwnership !== 'all' || urlSpecialties.length > 0) {
+      setHasSearched(true);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (query || ownership !== 'all' || selectedSpecialties.length > 0 || nearMe) {
+      setHasSearched(true);
+    }
+  }, [query, ownership, selectedSpecialties, nearMe]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [query, ownership, selectedSpecialties, nearMe, radiusKm]);
+
   useEffect(() => {
     const params: Record<string, string | string[]> = {};
     if (query) params.q = query;
@@ -166,7 +191,7 @@ export function SearchPage() {
                 onChange={(e) => { setQuery(e.target.value); setHasSearched(true); setPage(1); }}
                 placeholder="Search by hospital, city, or LGA"
                 aria-label="Search hospitals"
-                className="min-w-0 flex-1 bg-transparent text-[14px] text-ink placeholder:text-soft focus:outline-none"
+                className="min-w-0 flex-1 bg-transparent text-[13px] text-ink placeholder:text-soft focus:outline-none"
               />
               {query && (
                 <button
@@ -180,7 +205,7 @@ export function SearchPage() {
               <FontAwesomeIcon icon={faMagnifyingGlass} className="size-4 shrink-0 text-soft" />
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-1 items-center justify-end gap-2">
               <div className="hidden items-center rounded-[5px] border border-line bg-canvas sm:inline-flex">
                 {(
                   [
@@ -363,6 +388,8 @@ export function SearchPage() {
                   </>
                 )}
               </>
+            )}
+            </>
             )}
           </div>
         )}

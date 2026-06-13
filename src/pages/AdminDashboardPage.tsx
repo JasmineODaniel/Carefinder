@@ -69,7 +69,7 @@ export function AdminDashboardPage() {
               type="button"
               onClick={() => setTab(key)}
               className={`rounded-[5px] px-4 py-1.5 text-[13px] font-medium transition-colors ${
-                tab === key ? 'bg-accent text-black' : 'text-soft hover:text-ink'
+                tab === key ? 'bg-accent text-white' : 'text-soft hover:text-ink'
               }`}
             >
               {label}
@@ -266,7 +266,7 @@ function InviteAdminPanel() {
       <div className="rounded-[5px] border border-line bg-surface p-6">
         <div className="mb-5 flex items-center gap-3">
           <span className="grid size-9 place-items-center rounded-[5px] bg-accent">
-            <FontAwesomeIcon icon={faUserPlus} className="text-[14px] text-black" />
+            <FontAwesomeIcon icon={faUserPlus} className="text-[14px] text-white" />
           </span>
           <div>
             <p className="text-[14px] font-semibold text-ink">Invite a new admin</p>
@@ -303,7 +303,7 @@ function InviteAdminPanel() {
             <button
               type="submit"
               disabled={status === 'sending'}
-              className="flex items-center gap-2 self-start rounded-[5px] bg-accent px-4 py-2.5 text-[13px] font-semibold text-black transition hover:bg-accent-hover disabled:opacity-60"
+              className="flex items-center gap-2 self-start rounded-[5px] bg-accent px-4 py-2.5 text-[13px] font-semibold text-white transition hover:bg-accent-hover disabled:opacity-60"
             >
               <FontAwesomeIcon icon={faUserPlus} />
               {status === 'sending' ? 'Sending…' : 'Send invite'}
