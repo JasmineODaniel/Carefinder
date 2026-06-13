@@ -1,4 +1,5 @@
-import { Navigation, Loader2 } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLocationArrow, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 type Ownership = 'all' | 'public' | 'private';
 
@@ -50,6 +51,7 @@ export function FilterBar({
             return (
               <button
                 key={opt.value}
+                type="button"
                 onClick={() => onOwnershipChange(opt.value)}
                 className={`rounded-[5px] px-4 py-1.5 text-[13px] font-medium transition-colors ${
                   active ? 'bg-surface text-ink shadow-sm' : 'text-soft hover:text-ink'
@@ -62,6 +64,7 @@ export function FilterBar({
         </div>
 
         <button
+          type="button"
           onClick={onToggleNearMe}
           disabled={locating}
           className={`inline-flex items-center gap-2 rounded-[5px] px-4 py-2 text-[13px] font-medium transition-colors disabled:opacity-70 ${
@@ -70,11 +73,10 @@ export function FilterBar({
               : 'border border-line bg-surface text-ink hover:bg-muted'
           }`}
         >
-          {locating ? (
-            <Loader2 className="size-4 animate-spin" strokeWidth={2} />
-          ) : (
-            <Navigation className="size-4" strokeWidth={2} />
-          )}
+          <FontAwesomeIcon
+            icon={locating ? faSpinner : faLocationArrow}
+            className={`text-[13px]${locating ? ' animate-spin' : ''}`}
+          />
           {locating ? 'Locating…' : 'Near me'}
         </button>
 
@@ -97,6 +99,7 @@ export function FilterBar({
 
         {hasActiveFilters && (
           <button
+            type="button"
             onClick={onClear}
             className="ml-auto text-[13px] font-medium text-soft underline-offset-4 hover:text-ink hover:underline"
           >
@@ -112,6 +115,7 @@ export function FilterBar({
             return (
               <button
                 key={s}
+                type="button"
                 onClick={() => onToggleSpecialty(s)}
                 className={`rounded-[5px] px-3.5 py-1.5 text-[12px] font-medium capitalize transition-colors ${
                   active ? 'bg-accent text-on-accent' : 'bg-muted text-soft hover:text-ink'

@@ -70,6 +70,7 @@ describe('HospitalForm', () => {
       description: null,
       lat: null,
       lng: null,
+      photo_url: null,
     };
     render(
       <HospitalForm open={true} onClose={onClose} hospital={hospital} onSaved={onSaved} />,

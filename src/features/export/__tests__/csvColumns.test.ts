@@ -16,6 +16,7 @@ const mockHospital: Hospital = {
   description: null,
   lat: 6.4531,
   lng: 3.3958,
+  photo_url: null,
   rating: 4.2,
   review_count: 15,
 };
