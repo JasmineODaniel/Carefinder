@@ -46,7 +46,7 @@ export function Header() {
                   onClick={() => navigate('/admin')}
                   title="Dashboard"
                   aria-label="Dashboard"
-                  className="rounded-[5px] bg-accent px-3 py-2 text-[13px] text-black transition hover:bg-accent-hover"
+                  className="rounded-[5px] bg-accent px-3 py-2 text-[13px] text-white transition hover:bg-accent-hover"
                 >
                   <FontAwesomeIcon icon={faGauge} />
                 </button>
@@ -65,7 +65,7 @@ export function Header() {
                 to="/admin/login"
                 title="Admin login"
                 aria-label="Admin login"
-                className="rounded-[5px] bg-white px-3 py-2 text-[13px] text-black transition hover:bg-accent"
+                className="rounded-[5px] bg-accent px-3 py-2 text-[13px] text-white transition hover:bg-accent-hover"
               >
                 <FontAwesomeIcon icon={faUserShield} />
               </Link>
