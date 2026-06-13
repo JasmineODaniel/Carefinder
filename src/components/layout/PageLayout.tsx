@@ -40,7 +40,7 @@ export function PageLayout({ children }: { children: ReactNode }) {
             <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
 
               <div className="max-w-[360px]">
-                <span className="inline-block rounded-[5px] border border-white/10 px-3 py-1 text-[11px] font-medium tracking-widest text-white/50">
+                <span className="inline-block rounded-[5px] border border-accent/25 bg-accent/10 px-3 py-1 text-[11px] font-medium tracking-widest text-accent/70">
                   CAREFINDER
                 </span>
                 <h2 className="mt-5 font-display text-[28px] leading-[1.15] md:text-[34px]">
@@ -49,7 +49,7 @@ export function PageLayout({ children }: { children: ReactNode }) {
                     const chars = Math.max(0, Math.min(charCount - lineStart, line.text.length));
                     const isActive = !resetting && charCount >= lineStart && charCount < lineStart + line.text.length;
                     return (
-                      <span key={i} className={`block min-h-[1.15em] ${line.dim ? 'text-white/50' : 'text-white'}`}>
+                      <span key={i} className={`block min-h-[1.15em] ${line.dim ? 'text-accent/50' : 'text-white'}`}>
                         {line.text.slice(0, chars)}
                         {isActive && <span className="animate-pulse opacity-80">|</span>}
                       </span>
@@ -77,7 +77,7 @@ export function PageLayout({ children }: { children: ReactNode }) {
 
           <div className="mt-4 select-none overflow-hidden leading-none">
             <p
-              className="font-display font-bold tracking-tight text-white/[0.05]"
+              className="font-display font-bold tracking-tight text-accent/8"
               style={{ fontSize: 'clamp(72px, 13vw, 190px)', lineHeight: 0.85, animation: 'slide-lr 9s ease-in-out infinite' }}
             >
               CAREFINDER
