@@ -92,31 +92,6 @@ export function SearchPage() {
   const totalPages = Math.ceil(results.length / PAGE_SIZE);
   const paginated = results.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  const totalPages = Math.ceil(results.length / PAGE_SIZE);
-  const pageResults = results.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-
-  useEffect(() => {
-    const urlQuery = searchParams.get('q') ?? '';
-    const urlOwnership = (searchParams.get('ownership') as Ownership) ?? 'all';
-    const urlSpecialties = searchParams.getAll('specialty');
-    setQuery(urlQuery);
-    setOwnership(urlOwnership);
-    setSelectedSpecialties(urlSpecialties);
-    if (urlQuery || urlOwnership !== 'all' || urlSpecialties.length > 0) {
-      setHasSearched(true);
-    }
-  }, [searchParams]);
-
-  useEffect(() => {
-    if (query || ownership !== 'all' || selectedSpecialties.length > 0 || nearMe) {
-      setHasSearched(true);
-    }
-  }, [query, ownership, selectedSpecialties, nearMe]);
-
-  useEffect(() => {
-    setPage(1);
-  }, [query, ownership, selectedSpecialties, nearMe, radiusKm]);
-
   useEffect(() => {
     const params: Record<string, string | string[]> = {};
     if (query) params.q = query;
@@ -388,8 +363,6 @@ export function SearchPage() {
                   </>
                 )}
               </>
-            )}
-            </>
             )}
           </div>
         )}
