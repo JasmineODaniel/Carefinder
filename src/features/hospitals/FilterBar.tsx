@@ -69,7 +69,7 @@ export function FilterBar({
           disabled={locating}
           className={`inline-flex items-center gap-2 rounded-[5px] px-4 py-2 text-[13px] font-medium transition-colors disabled:opacity-70 ${
             nearMe
-              ? 'bg-accent text-on-accent hover:bg-accent-hover'
+              ? 'bg-accent text-white hover:bg-accent-hover'
               : 'border border-line bg-surface text-ink hover:bg-muted'
           }`}
         >
@@ -118,7 +118,7 @@ export function FilterBar({
                 type="button"
                 onClick={() => onToggleSpecialty(s)}
                 className={`rounded-[5px] px-3.5 py-1.5 text-[12px] font-medium capitalize transition-colors ${
-                  active ? 'bg-accent text-on-accent' : 'bg-muted text-soft hover:text-ink'
+                  active ? 'bg-accent text-white' : 'bg-muted text-soft hover:text-ink'
                 }`}
               >
                 {s}

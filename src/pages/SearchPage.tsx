@@ -108,9 +108,7 @@ export function SearchPage() {
     query.trim() !== '' || ownership !== 'all' || selectedSpecialties.length > 0 || nearMe;
 
   function toggleSpecialty(s: string) {
-    setSelectedSpecialties((prev) =>
-      prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s],
-    );
+    setSelectedSpecialties((prev) => (prev.includes(s) ? [] : [s]));
     setHasSearched(true);
     setPage(1);
   }
