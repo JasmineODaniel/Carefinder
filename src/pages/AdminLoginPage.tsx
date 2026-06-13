@@ -1,15 +1,14 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Lock } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../features/auth/AuthContext';
-
-const TAGS = ['Admin', 'Secure', 'Verified'];
 
 export function AdminLoginPage() {
   const navigate = useNavigate();
   const { signIn } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -27,126 +26,124 @@ export function AdminLoginPage() {
   }
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-canvas font-body">
-      <div className="flex w-full flex-col lg:flex-row">
-        <div className="relative flex w-full flex-col bg-surface lg:w-[44%] lg:min-h-screen">
-          <div className="flex items-center justify-between px-7 py-5">
-            <Link to="/" className="flex items-center gap-2">
-              <img src="/favicon.svg" alt="Carefinder logo" className="size-7 rounded-[5px]" />
-              <span className="font-display text-[14px] tracking-tight text-ink">CAREFINDER</span>
-            </Link>
-            <Link
-              to="/"
-              className="text-[13px] font-medium text-soft transition-colors hover:text-ink"
-            >
-              Back to site
-            </Link>
+    <div className="flex h-screen w-screen overflow-hidden font-body">
+
+      <div className="relative hidden flex-col items-center justify-between bg-[#1c1c1c] p-8 lg:flex lg:w-[45%]">
+        <div className="flex w-full items-center gap-2">
+          <img src="/favicon.svg" alt="Carefinder logo" className="size-7 rounded-[5px]" />
+          <span className="font-display text-[13px] tracking-tight text-white">CAREFINDER</span>
+        </div>
+
+        <div className="flex flex-col items-center text-center">
+          <div className="mb-8 flex size-[88px] items-center justify-center rounded-[20px] bg-white/10 shadow-lg shadow-black/30">
+            <img src="/favicon.svg" alt="" className="size-14 rounded-[12px]" />
           </div>
+          <h2 className="font-display text-[28px] leading-[1.2] text-white">
+            Manage Nigeria's<br />
+            <span className="text-accent">Hospital Directory.</span>
+          </h2>
+          <p className="mt-4 max-w-[280px] text-[13px] leading-relaxed text-white/45">
+            Add records, review submissions, and keep the directory accurate for everyone across all 36 states.
+          </p>
+        </div>
 
-          <div className="flex flex-1 flex-col justify-between px-7 pb-8 pt-6">
-            <div className="flex flex-col gap-7">
-              <div className="flex flex-wrap gap-2">
-                {TAGS.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-[5px] border border-line px-3 py-1 text-[11px] font-medium text-soft"
+        <div className="flex gap-2">
+          <span className="size-2 rounded-full bg-white" />
+          <span className="size-2 rounded-full bg-white/20" />
+          <span className="size-2 rounded-full bg-white/20" />
+        </div>
+      </div>
+
+      <div className="flex flex-1 flex-col bg-white">
+        <div className="flex items-center justify-between px-8 py-6">
+          <Link to="/" className="flex items-center gap-2 lg:hidden">
+            <img src="/favicon.svg" alt="Carefinder logo" className="size-6 rounded-[5px]" />
+            <span className="font-display text-[13px] tracking-tight text-ink">CAREFINDER</span>
+          </Link>
+          <div className="hidden lg:block" />
+          <Link to="/" className="text-[13px] text-soft transition-colors hover:text-ink">
+            Back to site →
+          </Link>
+        </div>
+
+        <div className="flex flex-1 flex-col items-center justify-center px-8 pb-10">
+          <div className="w-full max-w-[360px]">
+            <h1 className="font-display text-[26px] leading-[1.1] text-ink">
+              Welcome back, Admin!
+            </h1>
+            <p className="mt-2 text-[13px] text-soft">
+              Please enter your details to sign in to your account
+            </p>
+
+            <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="email" className="text-[12px] font-medium text-ink">
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="admin@example.com"
+                  required
+                  className="w-full rounded-[5px] border border-line px-4 py-3 text-[14px] text-ink placeholder:text-soft outline-none transition focus:border-ink"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="password" className="text-[12px] font-medium text-ink">
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="minimum 8 characters"
+                    required
+                    className="w-full rounded-[5px] border border-line px-4 py-3 pr-11 text-[14px] text-ink placeholder:text-soft outline-none transition focus:border-ink"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-soft transition-colors hover:text-ink"
                   >
-                    {tag}
-                  </span>
-                ))}
+                    {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                  </button>
+                </div>
               </div>
 
-              <div>
-                <h1 className="font-display text-[38px] leading-[1.05] tracking-tight text-ink md:text-[44px]">
-                  ADMIN<br />PORTAL.
-                </h1>
-                <p className="mt-4 text-[14px] leading-relaxed text-soft">
-                  Sign in to manage hospital records, review submissions, and moderate content.
+              {error && (
+                <p role="alert" className="text-[13px] text-error">
+                  {error}
                 </p>
-              </div>
+              )}
 
-              <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="email" className="text-[12px] font-medium text-soft">
-                    Email address
-                  </label>
-                  <div className="flex items-center gap-2 rounded-[5px] border border-line bg-canvas px-3 py-3 transition-colors focus-within:border-ink">
-                    <input
-                      id="email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="admin@example.com"
-                      required
-                      className="min-w-0 flex-1 bg-transparent text-[14px] text-ink placeholder:text-soft focus:outline-none"
-                    />
-                  </div>
-                </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="mt-1 w-full rounded-[5px] bg-accent py-3.5 text-[14px] font-semibold text-black transition hover:bg-accent-hover disabled:opacity-50"
+              >
+                {loading ? 'Signing in…' : 'Sign In →'}
+              </button>
+            </form>
 
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="password" className="text-[12px] font-medium text-soft">
-                    Password
-                  </label>
-                  <div className="flex items-center gap-2 rounded-[5px] border border-line bg-canvas px-3 py-3 transition-colors focus-within:border-ink">
-                    <input
-                      id="password"
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="••••••••"
-                      required
-                      className="min-w-0 flex-1 bg-transparent text-[14px] text-ink placeholder:text-soft focus:outline-none"
-                    />
-                  </div>
-                </div>
-
-                {error && (
-                  <p role="alert" className="text-[13px] text-error">
-                    {error}
-                  </p>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="mt-1 w-full rounded-[5px] bg-ink py-3.5 text-[14px] font-semibold text-surface transition-colors hover:bg-accent-hover disabled:opacity-50"
-                >
-                  {loading ? 'Signing in…' : 'Sign in'}
-                </button>
-              </form>
-            </div>
-
-            <div className="mt-8 flex flex-col gap-4 border-t border-line pt-6">
-              {[
-                { icon: '⊕', text: 'Only verified administrators can access this portal' },
-                { icon: '◎', text: 'All actions are logged and protected by Supabase RLS' },
-              ].map((item) => (
-                <div key={item.text} className="flex items-start gap-3">
-                  <span className="mt-0.5 text-[16px] text-soft">{item.icon}</span>
-                  <p className="text-[12px] leading-relaxed text-soft">{item.text}</p>
-                </div>
-              ))}
-            </div>
+            <p className="mt-5 text-center text-[13px] text-soft">
+              Forgot password?{' '}
+              <a href="mailto:admin@carefinder.ng" className="text-ink underline hover:no-underline">
+                Contact support
+              </a>
+            </p>
           </div>
         </div>
 
-        <div className="relative hidden flex-1 lg:block">
-          <div className="absolute inset-0 bg-ink">
-            <div className="flex h-full w-full items-center justify-center">
-              <p className="text-[12px] text-surface/30">Place your image here</p>
-            </div>
-          </div>
-
-          <div className="absolute bottom-8 left-6 right-6 rounded-[5px] border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
-            <div className="flex items-center gap-3">
-              <span className="grid size-9 place-items-center rounded-[5px] bg-white/10 text-surface">
-                <Lock className="size-4" strokeWidth={2} />
-              </span>
-              <div>
-                <p className="font-display text-[12px] tracking-wider text-surface">SECURE ACCESS</p>
-                <p className="mt-0.5 text-[11px] text-surface/50">Protected by Supabase Auth + Row Level Security</p>
-              </div>
-            </div>
+        <div className="flex items-center justify-between border-t border-line px-8 py-4">
+          <p className="text-[11px] text-soft">© {new Date().getFullYear()} Carefinder</p>
+          <div className="flex gap-5">
+            <Link to="/" className="text-[11px] text-soft transition-colors hover:text-ink">Home</Link>
+            <Link to="/search" className="text-[11px] text-soft transition-colors hover:text-ink">Search</Link>
           </div>
         </div>
       </div>
