@@ -85,10 +85,11 @@ export function HomePage() {
           { bottom: 144, left: 68 },
         ].map((pos, i) => (
           <div key={i} className="pointer-events-none absolute hidden lg:block" style={pos}>
-            <div className="size-[68px] overflow-hidden rounded-[5px] shadow-[0_4px_24px_rgba(0,0,0,0.14)] ring-2 ring-surface">
+            <div className="size-[68px] overflow-hidden rounded-[5px] shadow-[0_4px_24px_rgba(0,0,0,0.14)] ring-1 ring-accent/40">
               <img
                 src={`/assets/hop${i + 1}.jpg`}
                 alt=""
+                loading="lazy"
                 className="h-full w-full object-cover"
                 style={{ filter: 'brightness(0.8) grayscale(0.2)' }}
               />
@@ -143,7 +144,7 @@ export function HomePage() {
           </form>
 
           <div className="mt-3 flex flex-wrap justify-center gap-1.5">
-            {['Cardiology', 'Maternity', 'Emergency', 'Pediatrics'].map((s) => (
+            {['Cardiology', 'Maternity & Obstetrics', 'Emergency', 'Pediatrics'].map((s) => (
               <button
                 key={s}
                 type="button"
