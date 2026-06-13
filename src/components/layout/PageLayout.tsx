@@ -34,12 +34,12 @@ export function PageLayout({ children }: { children: ReactNode }) {
       <main className="flex-1">{children}</main>
 
       <footer className="bg-canvas px-4 pb-4 pt-6">
-        <div className="overflow-hidden rounded-[12px] bg-panel">
+        <div className="overflow-hidden rounded-xl bg-panel">
 
           <div className="px-8 pt-10">
             <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
 
-              <div className="max-w-[360px]">
+              <div className="max-w-90">
                 <span className="inline-block rounded-[5px] border border-accent/25 bg-accent/10 px-3 py-1 text-[11px] font-medium tracking-widest text-accent/70">
                   CAREFINDER
                 </span>
@@ -84,7 +84,7 @@ export function PageLayout({ children }: { children: ReactNode }) {
             </p>
           </div>
 
-          <div className="border-t border-white/[0.06] px-8 py-4">
+          <div className="border-t border-white/6 px-8 py-4">
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-[11px] text-white/30">
                 © {new Date().getFullYear()} Carefinder. All rights reserved.

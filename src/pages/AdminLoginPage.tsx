@@ -75,7 +75,7 @@ export function AdminLoginPage() {
               <h2 className="font-display text-[28px] leading-[1.2] text-white">
                 {s.headline}
               </h2>
-              <p className="mt-4 max-w-[280px] text-[13px] leading-relaxed text-white/45">
+              <p className="mt-4 max-w-70 text-[13px] leading-relaxed text-white/45">
                 {s.body}
               </p>
             </div>
@@ -109,7 +109,7 @@ export function AdminLoginPage() {
         </div>
 
         <div className="flex flex-1 flex-col items-center justify-center px-8 pb-10">
-          <div className="w-full max-w-[360px]">
+          <div className="w-full max-w-90">
             <h1 className="font-display text-[26px] leading-[1.1] text-ink">
               Welcome back, Admin!
             </h1>

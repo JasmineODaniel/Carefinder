@@ -46,7 +46,9 @@ export function SearchPage() {
   );
   const [showExport, setShowExport] = useState(false);
   const [showShare, setShowShare] = useState(false);
-  const [hasSearched, setHasSearched] = useState(false);
+  const [hasSearched, setHasSearched] = useState(
+    () => !!(searchParams.get('q') || (searchParams.get('ownership') ?? 'all') !== 'all' || searchParams.getAll('specialty').length > 0)
+  );
   const [page, setPage] = useState(1);
 
   useEffect(() => {

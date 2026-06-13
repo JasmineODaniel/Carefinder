@@ -85,7 +85,7 @@ export function HomePage() {
           { bottom: 144, left: 68 },
         ].map((pos, i) => (
           <div key={i} className="pointer-events-none absolute hidden lg:block" style={pos}>
-            <div className="size-[68px] overflow-hidden rounded-[5px] shadow-[0_4px_24px_rgba(0,0,0,0.14)] ring-1 ring-accent/40">
+            <div className="size-17 overflow-hidden rounded-[5px] shadow-[0_4px_24px_rgba(0,0,0,0.14)] ring-1 ring-accent/40">
               <img
                 src={`/assets/hop${i + 1}.jpg`}
                 alt=""
@@ -98,7 +98,7 @@ export function HomePage() {
         ))}
 
         <div
-          className="pointer-events-none absolute hidden size-[18px] rounded-full bg-accent shadow-lg shadow-accent/40 lg:block"
+          className="pointer-events-none absolute hidden size-4.5 rounded-full bg-accent shadow-lg shadow-accent/40 lg:block"
           style={{ bottom: 144, right: 68 }}
         />
 
@@ -123,7 +123,7 @@ export function HomePage() {
             Search 2,000+ hospitals across all 36 states — filter by specialty, proximity, or ownership type. Free and open to everyone.
           </p>
 
-          <form onSubmit={handleSearch} className="mt-7 w-full max-w-[440px]">
+          <form onSubmit={handleSearch} className="mt-7 w-full max-w-110">
             <div className="relative">
               <button
                 type="submit"
@@ -144,15 +144,13 @@ export function HomePage() {
           </form>
 
           <div className="mt-3 flex flex-wrap justify-center gap-1.5">
-            {['Cardiology', 'Maternity & Obstetrics', 'Emergency', 'Pediatrics'].map((s) => (
-              <button
-                key={s}
-                type="button"
-                onClick={() => navigate(`/search?specialty=${encodeURIComponent(s)}`)}
-                className="rounded-[5px] border border-line bg-surface px-3 py-1 text-[11px] text-soft shadow-sm transition hover:border-accent hover:text-accent"
+            {['Open access', 'Privacy first', 'Works on mobile', 'Lightning fast'].map((label) => (
+              <span
+                key={label}
+                className="rounded-[5px] border border-accent/25 bg-accent/10 px-3 py-1 text-[11px] font-medium text-accent"
               >
-                {s}
-              </button>
+                {label}
+              </span>
             ))}
           </div>
         </div>
@@ -212,7 +210,7 @@ export function HomePage() {
                   <div className="flex size-10 shrink-0 items-center justify-center rounded-[5px] bg-accent">
                     <span className="font-display text-[10px] text-black">{step.num}</span>
                   </div>
-                  {i < arr.length - 1 && <div className="mt-2 w-[2px] flex-1 bg-panel-border" />}
+                  {i < arr.length - 1 && <div className="mt-2 w-0.5 flex-1 bg-panel-border" />}
                 </div>
                 <div className="pb-10 pt-1">
                   <p className="font-display text-[22px] text-white">{step.title.toUpperCase()}</p>
@@ -224,9 +222,9 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="relative min-h-[560px] overflow-hidden border-b border-line bg-canvas">
+      <section className="relative min-h-140 overflow-hidden border-b border-line bg-canvas">
         <div className="mx-auto max-w-6xl px-6 py-16 md:py-24">
-          <div className="max-w-[300px]">
+          <div className="max-w-75">
             <p className="font-display text-[10px] tracking-[0.2em] text-accent">BROWSE BY SPECIALTY</p>
             <h2 className="mt-3 font-display text-[28px] leading-[1.1] text-ink md:text-[36px]">
               FIND EXACTLY<br />WHAT YOU<br />NEED.
