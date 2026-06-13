@@ -46,10 +46,20 @@ export function SearchPage() {
   );
   const [showExport, setShowExport] = useState(false);
   const [showShare, setShowShare] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
   const [page, setPage] = useState(1);
-  const [hasSearched, setHasSearched] = useState(
-    searchParams.getAll('specialty').length > 0 || !!searchParams.get('q') || !!searchParams.get('ownership'),
-  );
+
+  useEffect(() => {
+    const urlQuery = searchParams.get('q') ?? '';
+    const urlOwnership = (searchParams.get('ownership') as Ownership) ?? 'all';
+    const urlSpecialties = searchParams.getAll('specialty');
+    setQuery(urlQuery);
+    setOwnership(urlOwnership);
+    setSelectedSpecialties(urlSpecialties);
+    if (urlQuery || urlOwnership !== 'all' || urlSpecialties.length > 0) {
+      setHasSearched(true);
+    }
+  }, [searchParams]);
 
   const { hospitals, loading: hospitalsLoading, error: hospitalsError } = useHospitals();
   const usingRadius = nearMe && !!coords;
@@ -66,6 +76,7 @@ export function SearchPage() {
   }, [hospitals]);
 
   const results = useMemo(() => {
+    if (!hasSearched && !nearMe) return [];
     const q = query.trim().toLowerCase();
     return base.filter((h) => {
       const matchesText =
@@ -76,32 +87,10 @@ export function SearchPage() {
         selectedSpecialties.some((s) => h.specialties?.includes(s));
       return matchesText && matchesOwnership && matchesSpecialty;
     });
-  }, [base, query, ownership, selectedSpecialties]);
+  }, [base, query, ownership, selectedSpecialties, hasSearched, nearMe]);
 
   const totalPages = Math.ceil(results.length / PAGE_SIZE);
-  const pageResults = results.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-
-  useEffect(() => {
-    const urlQuery = searchParams.get('q') ?? '';
-    const urlOwnership = (searchParams.get('ownership') as Ownership) ?? 'all';
-    const urlSpecialties = searchParams.getAll('specialty');
-    setQuery(urlQuery);
-    setOwnership(urlOwnership);
-    setSelectedSpecialties(urlSpecialties);
-    if (urlQuery || urlOwnership !== 'all' || urlSpecialties.length > 0) {
-      setHasSearched(true);
-    }
-  }, [searchParams]);
-
-  useEffect(() => {
-    if (query || ownership !== 'all' || selectedSpecialties.length > 0 || nearMe) {
-      setHasSearched(true);
-    }
-  }, [query, ownership, selectedSpecialties, nearMe]);
-
-  useEffect(() => {
-    setPage(1);
-  }, [query, ownership, selectedSpecialties, nearMe, radiusKm]);
+  const paginated = results.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   useEffect(() => {
     const params: Record<string, string | string[]> = {};
@@ -117,8 +106,11 @@ export function SearchPage() {
     query.trim() !== '' || ownership !== 'all' || selectedSpecialties.length > 0 || nearMe;
 
   function toggleSpecialty(s: string) {
-    setSelectedSpecialties((prev) => (prev.includes(s) ? [] : [s]));
+    setSelectedSpecialties((prev) =>
+      prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s],
+    );
     setHasSearched(true);
+    setPage(1);
   }
 
   function toggleNearMe() {
@@ -156,6 +148,7 @@ export function SearchPage() {
     setSelectedSpecialties([]);
     setNearMe(false);
     setHasSearched(false);
+    setPage(1);
   }
 
   const showMap = viewMode === 'map' || viewMode === 'split';
@@ -166,12 +159,12 @@ export function SearchPage() {
       <div className="border-b border-line bg-surface px-6 py-4">
         <div className="mx-auto max-w-6xl">
           <div className="flex items-center gap-3">
-            <div className="flex w-full max-w-[260px] items-center gap-2 rounded-[5px] border border-line bg-canvas px-3 py-2.5 transition-colors focus-within:border-accent">
-              <FontAwesomeIcon icon={faLocationDot} className="shrink-0 text-[14px] text-soft" />
+            <div className="flex flex-1 items-center gap-2 rounded-[5px] border border-line bg-canvas px-3 py-2.5 transition-colors focus-within:border-accent">
+              <FontAwesomeIcon icon={faLocationDot} className="size-4 shrink-0 text-soft" />
               <input
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search hospital name"
+                onChange={(e) => { setQuery(e.target.value); setHasSearched(true); setPage(1); }}
+                placeholder="Search by hospital, city, or LGA"
                 aria-label="Search hospitals"
                 className="min-w-0 flex-1 bg-transparent text-[13px] text-ink placeholder:text-soft focus:outline-none"
               />
@@ -184,7 +177,7 @@ export function SearchPage() {
                   Clear
                 </button>
               )}
-              <FontAwesomeIcon icon={faMagnifyingGlass} className="shrink-0 text-[13px] text-soft" />
+              <FontAwesomeIcon icon={faMagnifyingGlass} className="size-4 shrink-0 text-soft" />
             </div>
 
             <div className="flex flex-1 items-center justify-end gap-2">
@@ -200,9 +193,8 @@ export function SearchPage() {
                     key={mode}
                     type="button"
                     onClick={() => setViewMode(mode)}
-                    title={label}
                     aria-label={label}
-                    className={`rounded-[5px] px-3 py-2.5 text-[13px] transition-colors ${
+                    className={`rounded-[5px] px-3 py-2 text-[12px] font-medium transition-colors ${
                       viewMode === mode ? 'bg-accent text-white' : 'text-soft hover:text-ink'
                     }`}
                   >
@@ -214,18 +206,16 @@ export function SearchPage() {
               <button
                 type="button"
                 onClick={() => setShowExport(true)}
-                title="Export CSV"
                 aria-label="Export CSV"
-                className="rounded-[5px] border border-line bg-canvas px-3 py-2.5 text-[13px] text-ink transition-colors hover:bg-muted"
+                className="rounded-[5px] border border-line bg-canvas px-3 py-2 text-[13px] font-medium text-ink transition-colors hover:bg-muted"
               >
                 <FontAwesomeIcon icon={faDownload} />
               </button>
               <button
                 type="button"
                 onClick={() => setShowShare(true)}
-                title="Share"
                 aria-label="Share"
-                className="rounded-[5px] bg-accent px-3 py-2.5 text-[13px] text-white transition-colors hover:bg-accent-hover"
+                className="rounded-[5px] bg-accent px-3 py-2 text-[13px] font-medium text-white transition-colors hover:bg-accent-hover"
               >
                 <FontAwesomeIcon icon={faShareNodes} />
               </button>
@@ -262,113 +252,117 @@ export function SearchPage() {
             {!hasSearched ? (
               <div className="rounded-[5px] border border-dashed border-line p-12 text-center">
                 <p className="font-display text-[14px] text-ink">SEARCH FOR HOSPITALS</p>
-                <p className="mt-1 text-[13px] text-soft">Type a name, city, or LGA above — or apply a filter to see results.</p>
+                <p className="mt-1 text-[13px] text-soft">
+                  Type a name, city, or LGA above — or pick a specialty to get started.
+                </p>
               </div>
             ) : (
-            <>
-            <p className="mb-4 text-[12px] text-soft">
-              {loading ? (
-                'Loading…'
-              ) : (
-                <>
-                  <span className="font-semibold text-ink">{results.length}</span>{' '}
-                  {results.length === 1 ? 'hospital' : 'hospitals'}
-                  {usingRadius && <> within {radiusKm} km</>}
-                  {query && <> matching &ldquo;{query}&rdquo;</>}
-                </>
-              )}
-            </p>
-
-            {error && (
-              <div
-                role="alert"
-                className="rounded-[5px] border border-error-border bg-error-bg p-5 text-[14px] text-error"
-              >
-                Couldn&apos;t load hospitals. {error}
-              </div>
-            )}
-
-            {!error && (
               <>
-                {loading ? (
-                  <SkeletonGrid split={viewMode === 'split'} />
-                ) : results.length === 0 ? (
-                  <div className="rounded-[5px] border border-dashed border-line p-12 text-center">
-                    <p className="font-display text-[14px] text-ink">NO HOSPITALS FOUND</p>
-                    <p className="mt-1 text-[13px] text-soft">Try widening your filters or radius.</p>
+                <p className="mb-4 text-[12px] text-soft">
+                  {loading ? (
+                    'Loading…'
+                  ) : (
+                    <>
+                      <span className="font-semibold text-ink">{results.length}</span>{' '}
+                      {results.length === 1 ? 'hospital' : 'hospitals'}
+                      {usingRadius && <> within {radiusKm} km</>}
+                      {query && <> matching &ldquo;{query}&rdquo;</>}
+                    </>
+                  )}
+                </p>
+
+                {error && (
+                  <div
+                    role="alert"
+                    className="rounded-[5px] border border-error-border bg-error-bg p-5 text-[14px] text-error"
+                  >
+                    Couldn&apos;t load hospitals. {error}
                   </div>
-                ) : (
+                )}
+
+                {!error && (
                   <>
-                    <div
-                      className={`grid grid-cols-1 gap-3 ${
-                        viewMode === 'split' ? '' : 'sm:grid-cols-2 lg:grid-cols-3'
-                      }`}
-                    >
-                      {pageResults.map((h) => (
-                        <HospitalCard
-                          key={h.id}
-                          hospital={h}
-                          distanceKm={
-                            usingRadius ? (h as HospitalWithDistance).distance_km : undefined
-                          }
-                          onSelect={(hospital) => navigate(`/hospitals/${hospital.id}`)}
-                          compact={viewMode === 'split'}
-                        />
-                      ))}
-                    </div>
-
-                    {totalPages > 1 && (
-                      <div className="mt-6 flex items-center justify-center gap-1">
-                        <button
-                          type="button"
-                          onClick={() => setPage((p) => Math.max(1, p - 1))}
-                          disabled={page === 1}
-                          className="rounded-[5px] border border-line px-3 py-2 text-[12px] text-soft transition-colors hover:border-accent hover:text-accent disabled:opacity-30"
-                        >
-                          <FontAwesomeIcon icon={faChevronLeft} />
-                        </button>
-
-                        {Array.from({ length: totalPages }, (_, i) => i + 1)
-                          .filter((p) => p === 1 || p === totalPages || Math.abs(p - page) <= 1)
-                          .reduce<(number | 'ellipsis')[]>((acc, p, idx, arr) => {
-                            if (idx > 0 && p - (arr[idx - 1] as number) > 1) acc.push('ellipsis');
-                            acc.push(p);
-                            return acc;
-                          }, [])
-                          .map((p, idx) =>
-                            p === 'ellipsis' ? (
-                              <span key={`ellipsis-${idx}`} className="px-1 text-[12px] text-soft">…</span>
-                            ) : (
-                              <button
-                                key={p}
-                                type="button"
-                                onClick={() => setPage(p as number)}
-                                className={`rounded-[5px] px-3 py-2 text-[12px] font-medium transition-colors ${
-                                  page === p
-                                    ? 'bg-accent text-white'
-                                    : 'border border-line text-soft hover:border-accent hover:text-accent'
-                                }`}
-                              >
-                                {p}
-                              </button>
-                            ),
-                          )}
-
-                        <button
-                          type="button"
-                          onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                          disabled={page === totalPages}
-                          className="rounded-[5px] border border-line px-3 py-2 text-[12px] text-soft transition-colors hover:border-accent hover:text-accent disabled:opacity-30"
-                        >
-                          <FontAwesomeIcon icon={faChevronRight} />
-                        </button>
+                    {loading ? (
+                      <SkeletonGrid split={viewMode === 'split'} />
+                    ) : results.length === 0 ? (
+                      <div className="rounded-[5px] border border-dashed border-line p-12 text-center">
+                        <p className="font-display text-[14px] text-ink">NO HOSPITALS FOUND</p>
+                        <p className="mt-1 text-[13px] text-soft">Try widening your filters or radius.</p>
                       </div>
+                    ) : (
+                      <>
+                        <div
+                          className={`grid grid-cols-1 gap-3 ${
+                            viewMode === 'split' ? '' : 'sm:grid-cols-2 lg:grid-cols-3'
+                          }`}
+                        >
+                          {paginated.map((h) => (
+                            <HospitalCard
+                              key={h.id}
+                              hospital={h}
+                              compact={viewMode === 'split'}
+                              distanceKm={
+                                usingRadius ? (h as HospitalWithDistance).distance_km : undefined
+                              }
+                              onSelect={(hospital) => navigate(`/hospitals/${hospital.id}`)}
+                            />
+                          ))}
+                        </div>
+
+                        {totalPages > 1 && (
+                          <div className="mt-6 flex items-center justify-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setPage((p) => Math.max(1, p - 1))}
+                              disabled={page === 1}
+                              aria-label="Previous page"
+                              className="rounded-[5px] border border-line px-3 py-1.5 text-[12px] text-soft transition-colors hover:border-accent hover:text-accent disabled:opacity-40"
+                            >
+                              <FontAwesomeIcon icon={faChevronLeft} />
+                            </button>
+
+                            {Array.from({ length: totalPages }, (_, i) => i + 1)
+                              .filter((p) => p === 1 || p === totalPages || Math.abs(p - page) <= 1)
+                              .reduce<(number | '…')[]>((acc, p, i, arr) => {
+                                if (i > 0 && p - (arr[i - 1] as number) > 1) acc.push('…');
+                                acc.push(p);
+                                return acc;
+                              }, [])
+                              .map((p, i) =>
+                                p === '…' ? (
+                                  <span key={`ellipsis-${i}`} className="px-1 text-[12px] text-soft">…</span>
+                                ) : (
+                                  <button
+                                    key={p}
+                                    type="button"
+                                    onClick={() => setPage(p as number)}
+                                    className={`rounded-[5px] px-3 py-1.5 text-[12px] font-medium transition-colors ${
+                                      page === p
+                                        ? 'bg-accent text-white'
+                                        : 'border border-line text-soft hover:border-accent hover:text-accent'
+                                    }`}
+                                  >
+                                    {p}
+                                  </button>
+                                ),
+                              )}
+
+                            <button
+                              type="button"
+                              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                              disabled={page === totalPages}
+                              aria-label="Next page"
+                              className="rounded-[5px] border border-line px-3 py-1.5 text-[12px] text-soft transition-colors hover:border-accent hover:text-accent disabled:opacity-40"
+                            >
+                              <FontAwesomeIcon icon={faChevronRight} />
+                            </button>
+                          </div>
+                        )}
+                      </>
                     )}
                   </>
                 )}
               </>
-            )}
-            </>
             )}
           </div>
         )}
@@ -405,7 +399,7 @@ function SkeletonGrid({ split }: { split: boolean }) {
       className={`grid grid-cols-1 gap-3 ${split ? '' : 'sm:grid-cols-2 lg:grid-cols-3'}`}
     >
       {Array.from({ length: split ? 4 : 6 }).map((_, i) => (
-        <div key={i} className="h-[160px] animate-pulse rounded-[5px] border border-line bg-muted" />
+        <div key={i} className="h-40 animate-pulse rounded-[5px] border border-line bg-muted" />
       ))}
     </div>
   );
