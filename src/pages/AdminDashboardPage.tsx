@@ -179,7 +179,7 @@ export function AdminDashboardPage() {
                               ))}
                             </div>
                           </td>
-                          <td className="hidden max-w-[260px] px-4 py-3 text-[13px] text-soft md:table-cell">
+                          <td className="hidden max-w-65 px-4 py-3 text-[13px] text-soft md:table-cell">
                             <span className="line-clamp-2">{r.text ?? <em className="text-dim">No text</em>}</span>
                           </td>
                           <td className="hidden whitespace-nowrap px-4 py-3 text-[12px] text-soft sm:table-cell">

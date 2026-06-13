@@ -88,7 +88,7 @@ export function HospitalMap({ hospitals, center, onSelect }: HospitalMapProps) {
 
   if (!MAPBOX_TOKEN) {
     return (
-      <div className="flex h-[480px] w-full flex-col items-center justify-center gap-3 rounded-[5px] border border-dashed border-line bg-muted">
+      <div className="flex h-120 w-full flex-col items-center justify-center gap-3 rounded-[5px] border border-dashed border-line bg-muted">
         <span className="grid size-10 place-items-center rounded-[5px] bg-surface text-soft shadow-sm">
           <FontAwesomeIcon icon={faMap} className="text-[18px]" />
         </span>
@@ -105,5 +105,5 @@ export function HospitalMap({ hospitals, center, onSelect }: HospitalMapProps) {
     );
   }
 
-  return <div ref={containerRef} className="h-[480px] w-full rounded-[5px]" />;
+  return <div ref={containerRef} className="h-120 w-full rounded-[5px]" />;
 }
